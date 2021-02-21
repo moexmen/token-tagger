@@ -15,9 +15,10 @@ batchsize = 100
     level: "P1",
     class_name: "P1-D",
     nric: "S1234567J",
-    name: "STUDENT NAME #{"%04d" % n}",
+    name: "STUDENT NAME #{"%04d" % (n + 1)}",
     contact: "88888888",
     status: Student.statuses[:pending],
+    serial_no: "%04d" % (n + 1),
     batch: "SIPS %d" % (1 + (n / batchsize))
   })
 end
