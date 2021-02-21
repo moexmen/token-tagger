@@ -7,14 +7,38 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 batchsize = 100
+
+School.create({
+  code: '1001',
+  cluster: "SOUTH 1",
+  name: "SOUTH ISLAND PRIMARY SCHOOL",
+})
 500.times do |n|
   Student.create({
     school_code: "1001",
-    school_cluster: "SOUTH 1",
-    school_name: "SOUTH ISLAND PRIMARY SCHOOL",
     level: "P1",
     class_name: "P1-D",
-    nric: "S1234567J",
+    nric: "S1234%3dJ" % n,
+    name: "STUDENT NAME #{"%04d" % (n + 1)}",
+    contact: "88888888",
+    status: Student.statuses[:pending],
+    serial_no: "%04d" % (n + 1),
+    batch: "SIPS %d" % (1 + (n / batchsize))
+  })
+end
+
+
+School.create({
+  code: '1002',
+  cluster: "North 1",
+  name: "NORTH ISLAND PRIMARY SCHOOL",
+})
+500.times do |n|
+  Student.create({
+    school_code: "1002",
+    level: "P1",
+    class_name: "P1-D",
+    nric: "S1134%03dA" % n,
     name: "STUDENT NAME #{"%04d" % (n + 1)}",
     contact: "88888888",
     status: Student.statuses[:pending],

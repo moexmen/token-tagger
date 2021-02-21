@@ -10,15 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_21_104929) do
+ActiveRecord::Schema.define(version: 2021_02_21_121628) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "schools", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "name"
+    t.string "cluster"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "students", force: :cascade do |t|
     t.string "school_code", null: false
-    t.string "school_name"
-    t.string "school_cluster"
     t.string "name", null: false
     t.string "class_name"
     t.string "level"
@@ -30,6 +36,7 @@ ActiveRecord::Schema.define(version: 2021_02_21_104929) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "serial_no", null: false
+    t.index ["nric"], name: "index_students_on_nric", unique: true
     t.index ["token_id"], name: "index_students_on_token_id", unique: true
   end
 
