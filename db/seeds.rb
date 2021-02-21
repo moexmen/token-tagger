@@ -5,3 +5,19 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+batchsize = 100
+500.times do |n|
+  Student.create({
+    school_code: "1001",
+    school_cluster: "SOUTH 1",
+    school_name: "SOUTH ISLAND PRIMARY SCHOOL",
+    level: "P1",
+    class_name: "P1-D",
+    nric: "S1234567J",
+    name: "STUDENT NAME #{"%04d" % n}",
+    contact: "88888888",
+    status: Student.statuses[:pending],
+    batch: "SIPS %d" % (1 + (n / batchsize))
+  })
+end
