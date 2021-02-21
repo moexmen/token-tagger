@@ -18,7 +18,7 @@ School.create({
     school_code: "1001",
     level: "P1",
     class_name: "P1-D",
-    nric: "S1234%3dJ" % n,
+    nric: "S1234%03dJ" % n,
     name: "STUDENT NAME #{"%04d" % (n + 1)}",
     contact: "88888888",
     status: Student.statuses[:pending],
@@ -43,6 +43,6 @@ School.create({
     contact: "88888888",
     status: Student.statuses[:pending],
     serial_no: "%04d" % (n + 1),
-    batch: "SIPS %d" % (1 + (n / batchsize))
+    batch: "NIPS %d" % (1 + (n / batchsize))
   })
 end
