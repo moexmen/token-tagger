@@ -3,6 +3,8 @@ class Student < ApplicationRecord
 
   enum status: { pending: 'pending', assigned: 'assigned', error: 'error-quota' }
 
+  has_one :school, foreign_key: 'code', primary_key: 'school_code'
+
   def next
     next_student = Student.taggable.where.not(id: id)
     if batch.empty?
