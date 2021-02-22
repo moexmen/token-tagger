@@ -1,0 +1,38 @@
+// Place all the styles related to the Students controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+
+.banner {
+  padding: 10px;
+  margin: 10px;
+}
+
+.bg-green {
+  background-color: #ccffcc;
+}
+
+.bg-yellow {
+  background-color: #ffffcc;
+}
+
+.bg-red {
+  background-color: #ffcccc;
+}
+
+.bg-grey {
+  background-color: #dddddd;
+}
+
+.banner-title {
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+table.borders {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+table.borders td, table.borders th {
+  border: 1px solid black;
+}

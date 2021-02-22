@@ -1,0 +1,20 @@
+<h1>Schools</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>School code</th><th>School cluster</th><th>School name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @schools.each do |school| %>
+      <tr>
+        <td><%= school.code %></td>
+        <td><%= school.cluster %></td>
+        <td><a href="<%= url_for controller: 'students', action: 'list_students', school: school.code %>"><%= school.name %></a></td>
+        <td>
+      </tr>
+    <%= %>
+  <% end %>
+  </tbody>
+</table>

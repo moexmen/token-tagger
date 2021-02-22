@@ -1,0 +1,49 @@
+<h1>Students</h1>
+<a href="<%= url_for controller: 'students', action: 'list_schools' %>">Back to list of schools</a>
+
+<% if @students.length > 0 %>
+  <h2><%= @school.code %> <%= @school.name %></h2>
+<% end %>
+
+<table class="borders">
+<tr>
+    <th>status</th>
+    <% @statuses.each do |k, v| %>
+    <td><%= k %></td>
+    <% end %>
+</tr>
+<tr>
+    <th>count</th>
+    <% @statuses.each do |k, v| %>
+    <td><%= v %></td>
+    <% end %>
+</tr>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>Seqno</th><th>Level</th><th>Class</th><th>Name</th><th>Status</th>
+</tr>
+</thead>
+<tbody>
+  <% @students.each do |student| %>
+    <tr>
+      <td><%= student.serial_no %></td>
+      <td><%= student.level %></td>
+      <td><%= student.class_name %></td>
+      <td><a href="<%= url_for controller: 'students', action: 'next_student', serial_no: student.serial_no %>"><%= student.name %></a></td>
+      
+      <% if student.status == Student.statuses[:pending] %>
+      <td class="bg-grey">Pending tagging</td>
+      <% elsif student.status == Student.statuses[:success] %>
+      <td class="bg-green">Successfully tagged at <%= student.success_at %></td>
+      <% elsif student.status == Student.statuses[:error] %>
+      <td class="bg-yellow">Student already collected a token</td>
+      <% elsif %>
+      <td><%= student.status %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</tbody>
+</table>

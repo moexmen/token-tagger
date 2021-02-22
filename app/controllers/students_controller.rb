@@ -1,6 +1,22 @@
 require 'json'
 
 class StudentsController < ApplicationController
+  def list_schools
+    @schools = School.all
+  end
+
+  def list_students
+    if params["school"].nil? || params["school"] == ""
+      redirect_to :action => "list_schools"
+      return
+    end
+
+    @students = Student.where(school_code: params[:school])
+    @school = @students.first.school
+    @statuses = @students.group(:status).count
+  end
+
+
   def next_student
     @student = Student.taggable
     if params[:batch]
