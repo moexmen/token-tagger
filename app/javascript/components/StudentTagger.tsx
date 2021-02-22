@@ -103,8 +103,10 @@ export default (props: StudentTaggerProps) => {
       </div>
       <div>Scan a token to tag to this student.</div>
       <div className="token">
-        <label htmlFor="tag">Token ID:</label>
-        <input id="tag" autoFocus={true} type="text" onChange={e => setTokenId(e.target.value)} value={tokenId} onKeyPress={handleEnter} />
+        <div>
+          <label htmlFor="tag">Token:</label>
+          <input id="tag" autoFocus={true} type="text" onChange={e => setTokenId(e.target.value)} value={tokenId} onKeyPress={handleEnter} />
+        </div>
         <button onClick={() => assignToken(tokenId, student.id)}>Go</button>
       </div>
 
