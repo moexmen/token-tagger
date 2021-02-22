@@ -12,6 +12,8 @@ class StudentController < ApplicationController
       end
     end
     @student = @student.first
+
+    render 'students/next_student'
   end
 
   def tag
@@ -34,11 +36,25 @@ class StudentController < ApplicationController
     end
 
     render json: {
-      success: res[:success],
-      reason: res[:reason],
-      student: {
+      result: {
+        success: res[:success],
+        reason: res[:reason],
+        student: {
+          id: student.id,
+          school_code: student.school_code,
+          school_name: student.school.name,
+          serial_no: student.serial_no,
+          name: student.name,
+          class_name: student.class_name,
+          level: student.level,
+          batch: student.batch
+        },
+      },
+      next_student: {
         id: next_student.id,
         school_code: next_student.school_code,
+        school_name: next_student.school.name,
+        serial_no: next_student.serial_no,
         name: next_student.name,
         class_name: next_student.class_name,
         level: next_student.level,
