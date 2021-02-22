@@ -36,7 +36,7 @@ interface StudentTaggerProps {
 
 const FlashMessage = ({ result }: { result?: Result} ) => {
   if (result == null) {
-    return;
+    return null;
   }
 
   let cssClass = result.success ? 'success' : 'failure';

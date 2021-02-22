@@ -1,6 +1,6 @@
 require 'json'
 
-class StudentController < ApplicationController
+class StudentsController < ApplicationController
   def next_student
     @student = Student.taggable
     if params[:batch]
@@ -12,8 +12,6 @@ class StudentController < ApplicationController
       end
     end
     @student = @student.first
-
-    render 'students/next_student'
   end
 
   def tag
