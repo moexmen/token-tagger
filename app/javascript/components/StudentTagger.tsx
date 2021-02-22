@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-enum FailureReasons {
+export enum FailureReasons {
   ApiError = 'api_error',
   InvalidToken = 'invalid_token',
   TokenAlreadyAssigned = 'token_already_assigned',
@@ -39,9 +39,9 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
     return null;
   }
 
-  let cssClass = result.success ? 'success' : 'failure';
+  let cssClass = result.success ? 'banner success' : 'banner failure';
   if (result.reason == FailureReasons.PersonHasToken) {
-    cssClass = 'warning';
+    cssClass = 'banner warning';
   }
 
   const student = `${result.student.serial_no} (${result.student.class_name}) ${result.student.name}`;
@@ -82,7 +82,7 @@ export default (props: StudentTaggerProps) => {
   }, [student.id])
 
   const handleEnter = e => {
-    if (e.keyCode === 13 && tokenId !== '') {
+    if (e.charCode === 13 && tokenId !== '') {
       assignToken(tokenId, student.id)
     }
   }

@@ -32,7 +32,7 @@
       <td><%= student.serial_no %></td>
       <td><%= student.level %></td>
       <td><%= student.class_name %></td>
-      <td><a href="<%= url_for controller: 'students', action: 'next_student', serial_no: student.serial_no %>"><%= student.name %></a></td>
+      <td><a href="<%= url_for controller: 'students', action: 'next_student', serial_no: student.serial_no, school: student.school_code %>"><%= student.name %></a></td>
       
       <% if student.status == Student.statuses[:pending] %>
       <td class="bg-grey">Pending tagging</td>

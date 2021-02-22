@@ -36,3 +36,13 @@ table.borders {
 table.borders td, table.borders th {
   border: 1px solid black;
 }
+
+.success {
+  background-color: #ccffcc;
+}
+.warning {
+  background-color: #ffffcc;
+}
+.failure {
+  background-color: #ffcccc;
+}

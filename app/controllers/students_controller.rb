@@ -39,11 +39,11 @@ class StudentsController < ApplicationController
     res = client.assign_token(params[:token_id], student.nric, student.contact)
     if res[:success]
       student.update({ token_id: params[:token_id], status: Student.statuses[:assigned]})
-    elsif res[:reason] == PERSON_HAS_TOKEN
+    elsif res[:reason] == Sally::PERSON_HAS_TOKEN
       student.update({ status: Student.statuses[:error]})
     end
 
-    if res[:success] || res[:reason] == PERSON_HAS_TOKEN
+    if res[:success] || res[:reason] == Sally::PERSON_HAS_TOKEN
       next_student = student.next
     else
       next_student = student
@@ -73,7 +73,8 @@ class StudentsController < ApplicationController
         class_name: next_student.class_name,
         level: next_student.level,
         batch: next_student.batch
-      }
+      },
+      csrf_token: form_authenticity_token
     }
   end
 end
