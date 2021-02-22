@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:experimental
 
-FROM ruby:2.7-alpine AS gems
+FROM ruby:2.7.2-alpine AS gems
 COPY Gemfile Gemfile.lock ./
 RUN --mount=type=ssh \
     apk --no-cache add --virtual build-dependencies \
@@ -14,7 +14,7 @@ RUN --mount=type=ssh \
     && bundle install \
     && apk del build-dependencies
 
-FROM ruby:2.7-alpine AS ci-gems
+FROM ruby:2.7.2-alpine AS ci-gems
 COPY Gemfile Gemfile.lock ./
 RUN --mount=type=ssh \
     apk --no-cache add --virtual build-dependencies \
@@ -27,21 +27,14 @@ RUN --mount=type=ssh \
     && gem install --conservative brakeman bundler-audit nokogiri \
     && apk del build-dependencies
 
-FROM ruby:2.7-alpine AS ci
+FROM ruby:2.7.2-alpine AS ci
+RUN apk --no-cache add chromium chromium-chromedriver
 COPY --from=ci-gems /usr/local/bundle /usr/local/bundle
 COPY --chown=app:nogroup . .
-RUN --mount=type=ssh \
-    apk --no-cache add --virtual build-dependencies \
-        yarn
-RUN --mount=type=ssh \
-    apk --no-cache add chromium chromium-chromedriver
-RUN yarn install --check-files
-ENV CHROMEDRIVER_PATH=/usr/bin/chromedriver
 USER app
 
-FROM ruby:2.7-alpine AS gold
+FROM ruby:2.7.2-alpine AS gold
 COPY --from=gems /usr/local/bundle /usr/local/bundle
-COPY --from=gems /app/vendor/bundle vendor/bundle
 COPY --chown=app:nogroup . .
 ENV RAILS_ENV production
 RUN --mount=type=ssh \
