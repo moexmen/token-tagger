@@ -1,0 +1,3 @@
+[submodule ".ci/ci-runner"]
+	path = .ci/ci-runner
+	url = https://github.estl.moe/estl/ci-runner
