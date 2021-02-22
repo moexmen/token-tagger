@@ -12,7 +12,7 @@ export default (props: Props) => {
   const [result, setResult ] = useState<Result|undefined>(undefined);
 
   const assignToken = (tokenId: string, studentId: number) => {
-    // TODO: wire up to backend
+    // TODO: wire up to backend on students/tag
   }
 
   return <StudentTagger result={result} student={student} assignToken={assignToken} />

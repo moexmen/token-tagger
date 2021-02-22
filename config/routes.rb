@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   root to: 'students#list_schools'
   get 'students', to: 'students#list_students'
   get 'students/next', to: 'students#next_student'
+  post 'students/tag', to: 'students#tag'
 end
