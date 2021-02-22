@@ -18,7 +18,7 @@ module Sally
     def assign_token(token_id, nric, contact)
       # TODO: make api call and return result
       # return { success: false, reason: API_ERROR | INVALID_TOKEN ...  } if api call fails
-      { success: false, reason: PERSON_HAS_TOKEN }
+      { success: true }
     end
   end
 end

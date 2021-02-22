@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import QrReader from 'react-qr-reader'
 
 export enum FailureReasons {
   ApiError = 'api_error',
@@ -76,6 +77,7 @@ export default (props: StudentTaggerProps) => {
   const { student, result, assignToken } = props;
 
   const [tokenId, setTokenId] = useState('');
+  const [showQr, setShowQr] = useState(false);
 
   useEffect(() => {
     setTokenId('');
@@ -105,6 +107,16 @@ export default (props: StudentTaggerProps) => {
         <input id="tag" autoFocus={true} type="text" onChange={e => setTokenId(e.target.value)} value={tokenId} onKeyPress={handleEnter} />
         <button onClick={() => assignToken(tokenId, student.id)}>Go</button>
       </div>
+
+      {!showQr && <button onClick={() => setShowQr(true)}>Use camera</button>}
+      {showQr && <QrReader
+        delay={100}
+        onScan={data => {
+          if (data) {
+            setTokenId(data);
+          }
+        }}
+      />}
     </div>
   )
 }
