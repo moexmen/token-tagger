@@ -1,24 +1,39 @@
-# README
+# Token Tagger
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Attempt to streamline the process of assigning TT tokens to students so as to reduce manpower costs =P
 
-Things you may want to cover:
+Idea: Instead of scanning 3 (TT token, nric, contact number) items in SupplyAlly, this app will keep track of the students to be tagged, so it sufficies to just scan the TT token
 
-* Ruby version
+# Setup
 
-* System dependencies
+1. Install gem dependencies
+    - `bundle install`
+1. `rails s` to start server
 
-* Configuration
+## Database
+Make sure that an instance of postgres is running. An instance of postgres can be started in docker by running `docker-compose -f  docker-compose-local.yml up`
 
-* Database creation
+### Setup
 
-* Database initialization
+1. Start fresh with a new database by running:
+    ```
+    rails db:setup
+    ```
 
-* How to run the test suite
+### Migrations
 
-* Services (job queues, cache servers, search engines, etc.)
+1. If you need to make changes to existing tables, add a new migration
+    ```
+    rails generate migration <migration_name>
+    ```
 
-* Deployment instructions
+2. Run the new migrations
+    ```
+    rails db:migrate
+    ```
 
-* ...
+3. Update schema diagram
+
+    ```
+    make schema
+    ```
