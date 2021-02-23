@@ -9,7 +9,7 @@ RUN --mount=type=ssh \
                libxml2-dev \
                libxslt-dev \
     && gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)" \
-    && bundle config set --local deployment 'true' \
+    # && bundle config set --local deployment 'true' \
     && bundle config set --local without 'development test' \
     && bundle install \
     && apk del build-dependencies
@@ -38,7 +38,18 @@ COPY --from=gems /usr/local/bundle /usr/local/bundle
 COPY --chown=app:nogroup . .
 ENV RAILS_ENV production
 RUN --mount=type=ssh \
-    apk --no-cache add --virtual build-dependencies \
+    adduser -S -h /app -u 10000 app \
+    && apk --no-cache add \
+        bash \
+        curl \
+        git \
+        libxml2 \
+        libxslt \
+        nodejs \
+        openssh-client \
+        postgresql-client \
+        tzdata \
+    && apk --no-cache add --virtual build-dependencies \
         yarn \
     && SECRET_KEY_BASE=1a bundle exec rails assets:precompile \
     && apk del build-dependencies \
