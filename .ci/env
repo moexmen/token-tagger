@@ -1,4 +1,4 @@
 #!/bin/bash
 
-APP="naomileow/token-tagger"
+APP="estl/token-tagger"
 REGISTRY_URL="dtr.estl.moe"
