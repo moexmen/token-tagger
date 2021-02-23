@@ -28,18 +28,19 @@ RUN --mount=type=ssh \
     && apk del build-dependencies
 
 FROM ruby:2.7.2-alpine AS ci
+RUN adduser -S -h /app -u 10000 app
 RUN apk --no-cache add chromium chromium-chromedriver
 COPY --from=ci-gems /usr/local/bundle /usr/local/bundle
 COPY --chown=app:nogroup . .
 USER app
 
 FROM ruby:2.7.2-alpine AS gold
+RUN adduser -S -h /app -u 10000 app
 COPY --from=gems /usr/local/bundle /usr/local/bundle
 COPY --chown=app:nogroup . .
 ENV RAILS_ENV production
 RUN --mount=type=ssh \
-    adduser -S -h /app -u 10000 app \
-    && apk --no-cache add \
+    apk --no-cache add \
         bash \
         curl \
         git \
