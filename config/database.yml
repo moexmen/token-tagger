@@ -88,5 +88,5 @@ production:
   host: <%= ENV['DATABASE_HOST'] %>
   port: <%= ENV['DATABASE_PORT'] %>
   database: <%= ENV.fetch("DATABASE_NAME") { "token_tagger_production" } %>
-  username: <%= ENV.fetch("DATABASE_USERNAME") { "token_tagger" } %>
+  username: <%= ENV.fetch("DATABASE_USER") { "token_tagger" } %>
   password: <%= ENV['DATABASE_PASSWORD'] %>

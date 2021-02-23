@@ -55,6 +55,7 @@ RUN --mount=type=ssh \
     && SECRET_KEY_BASE=1a bundle exec rails assets:precompile \
     && apk del build-dependencies \
     && mkdir -p tmp/pids \
+    && chown -R app tmp \
     && chown -R app /app
 USER app
 EXPOSE 3000
