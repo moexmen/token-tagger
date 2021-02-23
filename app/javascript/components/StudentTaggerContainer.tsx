@@ -16,6 +16,8 @@ export default (props: Props) => {
   const assignToken = (tokenId: string, studentId: number) => {
     // TODO: wire up to backend on students/tag
     if (tokenId !== '') {
+      setResult(null);
+      
       fetch('/students/tag', {
         method: 'POST',
         headers: {

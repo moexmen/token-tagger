@@ -14,7 +14,20 @@ services:
     ports:
       - "5432:5432"
 
-
+  # app:
+  #   image: dtr.estl.moe/estl/token-tagger:master
+  #   restart: always
+  #   environment:
+  #     SECRET_KEY_BASE: 1b1a1c
+  #     RACK_ENV: production
+  #     RAILS_ENV: production
+  #     RAILS_SERVE_STATIC_FILES: "true"
+  #     DATABASE_HOST: psql
+  #     DATABASE_NAME: token_tagger_development
+  #     DATABASE_PORT: '5432'
+  #     DATABASE_USER: postgres
+  #   ports:
+  #     - "3000:3000"
 volumes:
   # redis: {}
   psql: {}
