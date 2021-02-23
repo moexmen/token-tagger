@@ -9,7 +9,7 @@ RUN --mount=type=ssh \
                libxml2-dev \
                libxslt-dev \
     && gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)" \
-    # && bundle config set --local deployment 'true' \
+    && bundle config set --local deployment 'true' \
     && bundle config set --local without 'development test' \
     && bundle install \
     && apk del build-dependencies
@@ -37,6 +37,7 @@ USER app
 FROM ruby:2.7.2-alpine AS gold
 RUN adduser -S -h /app -u 10000 app
 COPY --from=gems /usr/local/bundle /usr/local/bundle
+COPY --from=gems /vendor/bundle vendor/bundle
 COPY --chown=app:nogroup . .
 ENV RAILS_ENV production
 RUN --mount=type=ssh \
