@@ -107,7 +107,7 @@ export default (props: StudentTaggerProps) => {
           <label htmlFor="tag">Token:</label>
           <input id="tag" autoFocus={true} type="text" onChange={e => setTokenId(e.target.value)} value={tokenId} onKeyPress={handleEnter} />
         </div>
-        <button onClick={() => assignToken(tokenId, student.id)}>Go</button>
+        <button disabled={tokenId === ''} onClick={() => assignToken(tokenId, student.id)}>Go</button>
       </div>
 
       {!showQr && <button onClick={() => setShowQr(true)}>Use camera</button>}
