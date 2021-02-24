@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import QrReader from 'react-qr-reader'
 
+import Modal from './Modal';
+
 export enum FailureReasons {
   ApiError = 'api_error',
   InvalidToken = 'invalid_token',
@@ -73,25 +75,58 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
     );
   }
 }
+
+interface ResultModalProps {
+  showModal: boolean;
+  result?: Result;
+  setShowModal: (show: boolean) => void;
+}
+const ResultModal = ({ result, showModal, setShowModal }: ResultModalProps ) => {
+  if (!showModal) {
+    return null;
+  }
+
+  return (
+    <Modal isOpen={showModal} parent={document.body}>
+      <FlashMessage result={result} />
+      <div className="modal-footer">
+        <button  onClick={() => setShowModal(false)}>Next</button>
+      </div>
+    </Modal>
+  );
+}
+
 export default (props: StudentTaggerProps) => {
   const { student, result, assignToken } = props;
 
   const [tokenId, setTokenId] = useState('');
   const [showQr, setShowQr] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     setTokenId('');
   }, [student.id])
 
+  useEffect(() => {
+    // Show modal with result if result is available
+    setShowModal(result != null);
+  }, [result])
+
   const handleEnter = e => {
-    if (e.charCode === 13 && tokenId !== '') {
-      assignToken(tokenId, student.id)
+    if (tokenId === '' || showModal) {
+      return;
     }
+    if (e.charCode !== 13) {
+      return;
+    }
+
+    assignToken(tokenId, student.id);
   }
 
   return (
     <div className="content">
-      <FlashMessage result={result} />
+      {/* <FlashMessage result={result} /> */}
+      <ResultModal result={result} showModal={showModal} setShowModal={setShowModal} />
       
       <div className="student-details">
         <div className="serial-no">{student.serial_no}</div>
@@ -107,15 +142,19 @@ export default (props: StudentTaggerProps) => {
           <label htmlFor="tag">Token:</label>
           <input id="tag" autoFocus={true} type="text" onChange={e => setTokenId(e.target.value)} value={tokenId} onKeyPress={handleEnter} />
         </div>
-        <button disabled={tokenId === ''} onClick={() => assignToken(tokenId, student.id)}>Go</button>
       </div>
 
       {!showQr && <button onClick={() => setShowQr(true)}>Use camera</button>}
       {showQr && <QrReader
         delay={100}
         onScan={data => {
+          if (showModal) {
+            return;
+          }
+
           if (data) {
             setTokenId(data);
+            assignToken(data, student.id);
           }
         }}
       />}

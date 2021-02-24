@@ -13,8 +13,15 @@ export default (props: Props) => {
   const [result, setResult ] = useState<Result|undefined>(undefined);
   const [csrfToken, setCsrfToken] = useState(props.csrfToken);
 
+  const [isFetching, setIsFetching] = useState(false);
+
   const assignToken = (tokenId: string, studentId: number) => {
-    // TODO: wire up to backend on students/tag
+    if (isFetching) {
+      return;
+    }
+
+    setIsFetching(true);
+
     if (tokenId !== '') {
       setResult(null);
       
@@ -27,10 +34,14 @@ export default (props: Props) => {
         body: JSON.stringify({ student_id: studentId, token_id: tokenId })
         }).then(resp => resp.json())
         .then(data => {
+          setIsFetching(false);
+
           setResult(data.result);
           setStudent(data.next_student);
           setCsrfToken(data.csrf_token);
         }).catch(e => {
+          setIsFetching(false);
+          
           setResult({
             success: false,
             reason: FailureReasons.ApiError,
