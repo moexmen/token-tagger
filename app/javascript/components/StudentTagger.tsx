@@ -61,7 +61,7 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
       <div className={cssClass}>
         <h3>Student error</h3>
         <p><span>{student}</span> already has a token.</p>
-        <p>Please discard the label and assign this token to another student</p>
+        <p>Please assign this token to another student</p>
       </div>
     );
   } else {
@@ -90,7 +90,7 @@ const ResultModal = ({ result, showModal, setShowModal }: ResultModalProps ) => 
     <Modal isOpen={showModal} parent={document.body}>
       <FlashMessage result={result} />
       <div className="modal-footer">
-        <button  onClick={() => setShowModal(false)}>Next</button>
+        <button  onClick={() => setShowModal(false)}>OK</button>
       </div>
     </Modal>
   );
