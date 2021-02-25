@@ -27,7 +27,7 @@
 </tr>
 </thead>
 <tbody>
-  <% @students.each do |student| %>
+  <% @students.order(serial_no: :asc).each do |student| %>
     <tr>
       <td><%= student.serial_no %></td>
       <td><%= student.level %></td>
