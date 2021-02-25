@@ -6,6 +6,7 @@ import Modal from './Modal';
 export enum FailureReasons {
   ApiError = 'api_error',
   InvalidToken = 'invalid_token',
+  InvalidNric = 'invalid_nric',
   TokenAlreadyAssigned = 'token_already_assigned',
   PersonHasToken = 'person_has_token'
 }
@@ -43,7 +44,7 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
   }
 
   let cssClass = result.success ? 'banner success' : 'banner failure';
-  if (result.reason == FailureReasons.PersonHasToken) {
+  if (result.reason == FailureReasons.PersonHasToken || result.reason == FailureReasons.InvalidNric) {
     cssClass = 'banner warning';
   }
 
@@ -61,6 +62,15 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
       <div className={cssClass}>
         <h3>Student error</h3>
         <p><span>{student}</span> already has a token.</p>
+        <p>Please assign this token to another student</p>
+      </div>
+    );
+  } else if (result.reason == FailureReasons.InvalidNric) {
+    // For completeness. Should not happen if we validate the nric while seeding our DB
+    return (
+      <div className={cssClass}>
+        <h3>Student error</h3>
+        <p><span>{student}</span>'s NRIC is invalid.</p>
         <p>Please assign this token to another student</p>
       </div>
     );

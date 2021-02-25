@@ -33,7 +33,15 @@ RSpec.describe Sally::Client do
     
       it { expect(subject).to eq({ success: false, reason: Sally::PERSON_HAS_TOKEN }) }
       it { expect{ subject }.not_to change{ student.reload.token_id } }
-      it { expect{ subject }.to change{ student.reload.status }.from('pending').to('error') }
+      it { expect{ subject }.to change{ student.reload.status }.from('pending').to('error_quota') }
+    end
+
+    context 'NRIC is invalid' do  
+      before { stub_request(:post, endpoint).to_return(status: 400,  body: { message: Sally::Client::INVALID_NRIC }.to_json ) }
+    
+      it { expect(subject).to eq({ success: false, reason: Sally::INVALID_NRIC }) }
+      it { expect{ subject }.not_to change{ student.reload.token_id } }
+      it { expect{ subject }.to change{ student.reload.status }.from('pending').to('error_nric') }
     end
   end
 end

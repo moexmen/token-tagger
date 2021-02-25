@@ -1,8 +1,9 @@
 module Sally
   API_ERROR = 'api_error'.freeze
+  INVALID_NRIC = 'invalid_nric'.freeze
   INVALID_TOKEN = 'invalid_token'.freeze
-  TOKEN_ALREADY_ASSIGNED =  'token_already_assigned'.freeze
   PERSON_HAS_TOKEN = 'person_has_token'.freeze
+  TOKEN_ALREADY_ASSIGNED =  'token_already_assigned'.freeze
   
   class Client
     TOKEN_ALREADY_ASSIGNED_MESSAGE = 'Invalid Purchase Request: Duplicate identifier inputs'.freeze
@@ -50,6 +51,8 @@ module Sally
         Sally::TOKEN_ALREADY_ASSIGNED
       when INVALID_TOKEN_MESSAGE
         Sally::INVALID_TOKEN
+      when INVALID_NRIC
+        Sally::INVALID_NRIC
       when PERSON_QUOTA_REACHED
         Sally::PERSON_HAS_TOKEN
       else
@@ -57,7 +60,9 @@ module Sally
       end
 
       status = if reason == Sally::PERSON_HAS_TOKEN
-                 Student.statuses[:error]
+                Student.statuses[:error_quota]
+               elsif reason == Sally::INVALID_NRIC
+                Student.statuses[:error_nric]
                else
                 Student.statuses[:pending]
                end
