@@ -1,5 +1,5 @@
 <h1>Students</h1>
-<a href="<%= url_for controller: 'students', action: 'list_schools' %>">Back to list of schools</a>
+<a href="<%= url_for controller: 'students', action: 'show' %>">Check student tagged to token</a>
 
 <% if @students.length > 0 %>
   <h2><%= @school.code %> <%= @school.name %></h2>

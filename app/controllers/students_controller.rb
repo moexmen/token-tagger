@@ -1,6 +1,8 @@
 require 'json'
 
 class StudentsController < ApplicationController
+  protect_from_forgery except: :show
+
   def list_schools
     @schools = School.all
   end
@@ -45,5 +47,16 @@ class StudentsController < ApplicationController
     end
 
     render 'tag'
+  end
+
+  def show
+    if params[:token_id]
+      @student = Student.find_by(token_id: params[:token_id])
+    end
+
+    respond_to do |format|
+      format.json
+      format.html
+    end
   end
 end
