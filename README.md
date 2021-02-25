@@ -5,7 +5,7 @@ Attempt to streamline the process of assigning TT tokens to students so as to re
 Idea: Instead of scanning 3 (TT token, nric, contact number) items in SupplyAlly, this app will keep track of the students to be tagged, so it sufficies to just scan the TT token
 
 # Setup
-
+1. Copy `.env.example` to `.env` and set the variables accordingly.
 1. Install gem dependencies
     - `bundle install`
 1. `rails s` to start server

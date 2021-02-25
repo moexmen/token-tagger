@@ -65,7 +65,18 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
       </div>
     );
   } else {
-    const message = result.reason == FailureReasons.InvalidToken ? 'Invalid token id!' : 'Something went wrong! Please try to scan the token again';
+    let message = '';
+    switch (result.reason) {
+      case FailureReasons.InvalidToken:
+        message = 'Invalid Token ID.';
+        break;
+      case FailureReasons.TokenAlreadyAssigned:
+        message = 'The token has already been tagged to someone else.';
+        break;
+      default:
+        message = 'Something went wrong! Please try to scan the token again.';
+    }
+
     return (
       <div className={cssClass}>
         <h3>Error</h3>

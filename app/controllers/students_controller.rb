@@ -31,17 +31,12 @@ class StudentsController < ApplicationController
   end
 
   def tag
-    client = Sally::Client.new
+    client = Sally::Client.new(ENV['SALLY_API_ENDPOINT'], ENV['SALLY_API_KEY'])
 
     student = Student.taggable.find_by(id: params[:student_id])
     return head :bad_request if student.nil?
 
     res = client.assign_token(params[:token_id], student.nric, student.contact)
-    if res[:success]
-      student.update({ token_id: params[:token_id], status: Student.statuses[:assigned]})
-    elsif res[:reason] == Sally::PERSON_HAS_TOKEN
-      student.update({ status: Student.statuses[:error]})
-    end
 
     if res[:success] || res[:reason] == Sally::PERSON_HAS_TOKEN
       next_student = student.next
