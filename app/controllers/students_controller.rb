@@ -33,43 +33,17 @@ class StudentsController < ApplicationController
   def tag
     client = Sally::Client.new(ENV['SALLY_API_ENDPOINT'], ENV['SALLY_API_KEY'])
 
-    student = Student.taggable.find_by(id: params[:student_id])
-    return head :bad_request if student.nil?
+    @student = Student.taggable.find_by(id: params[:student_id])
+    return head :bad_request if @student.nil?
 
-    res = client.assign_token(params[:token_id], student.nric, student.contact)
+    @result = client.assign_token(params[:token_id], @student.nric, @student.contact)
 
-    if res[:success] || res[:reason] == Sally::PERSON_HAS_TOKEN
-      next_student = student.next
+    if @result[:success] || @result[:reason] == Sally::PERSON_HAS_TOKEN
+      @next_student = @student.next
     else
-      next_student = student
+      @next_student = @student
     end
 
-    render json: {
-      result: {
-        success: res[:success],
-        reason: res[:reason],
-        student: {
-          id: student.id,
-          school_code: student.school_code,
-          school_name: student.school.name,
-          serial_no: student.serial_no,
-          name: student.name,
-          class_name: student.class_name,
-          level: student.level,
-          batch: student.batch
-        },
-      },
-      next_student: {
-        id: next_student.id,
-        school_code: next_student.school_code,
-        school_name: next_student.school.name,
-        serial_no: next_student.serial_no,
-        name: next_student.name,
-        class_name: next_student.class_name,
-        level: next_student.level,
-        batch: next_student.batch
-      },
-      csrf_token: form_authenticity_token
-    }
+    render 'tag'
   end
 end

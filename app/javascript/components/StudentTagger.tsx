@@ -34,7 +34,7 @@ interface StudentTaggerProps {
     reason: string;
     student: Student;
   };
-  student: Student;
+  student: Student | null;
   assignToken: (tokenId: string, studentId: number) => void;
 }
 
@@ -126,7 +126,7 @@ export default (props: StudentTaggerProps) => {
 
   useEffect(() => {
     setTokenId('');
-  }, [student.id])
+  }, [student])
 
   useEffect(() => {
     // Show modal with result if result is available
@@ -144,9 +144,17 @@ export default (props: StudentTaggerProps) => {
     assignToken(tokenId, student.id);
   }
 
+  if (student == null) {
+    return (
+      <div className="content">
+        <ResultModal result={result} showModal={showModal} setShowModal={setShowModal} />
+        <div>Finshed tagging all students in this batch</div>
+      </div>
+    );
+  }
+
   return (
     <div className="content">
-      {/* <FlashMessage result={result} /> */}
       <ResultModal result={result} showModal={showModal} setShowModal={setShowModal} />
       
       <div className="student-details">

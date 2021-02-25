@@ -108,6 +108,8 @@ GEM
     hashdiff (1.0.1)
     i18n (1.8.9)
       concurrent-ruby (~> 1.0)
+    jbuilder (2.11.2)
+      activesupport (>= 5.0.0)
     listen (3.4.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -260,6 +262,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faraday
+  jbuilder (~> 2.7)
   listen (~> 3.3)
   pg (~> 1.1)
   puma (~> 5.0)

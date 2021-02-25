@@ -106,4 +106,17 @@ module Sally
       end
     end
   end
+
+  class MockClient
+    def initialize(endpoint = '', client_secret = '')
+      @endpoint = endpoint
+      @client_secret = client_secret
+    end
+    
+    def assign_token(token_id, nric, contact)
+      student = Student.where(nric: nric)
+      student.update({token_id: token_id, status: Student.statuses[:assigned]})
+      { success: true }
+    end
+  end
 end
