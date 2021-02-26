@@ -64,13 +64,15 @@ const StudentModal = ({ result, showModal, setShowModal }: StudentModalProps ) =
     );
   }
 
+  const closeModal = () => setShowModal(false);
+
   return (
-    <Modal isOpen={showModal} parent={document.body}>
+    <Modal isOpen={showModal} parent={document.body} onBackdropClick={closeModal}>
       <div className="modal-body">
         {body}
       </div>
       <div className="modal-footer">
-        <button  onClick={() => setShowModal(false)}>OK</button>
+        <button  onClick={closeModal}>OK</button>
       </div>
     </Modal>
   );

@@ -40,7 +40,7 @@ class StudentsController < ApplicationController
 
     @result = client.assign_token(params[:token_id], @student.nric, @student.contact)
 
-    if @result[:success] || @result[:reason] == Sally::PERSON_HAS_TOKEN
+    if @result[:success] || @result[:reason] == Sally::PERSON_HAS_TOKEN || @result[:reason] == Sally::INVALID_NRIC
       @next_student = @student.next
     else
       @next_student = @student
