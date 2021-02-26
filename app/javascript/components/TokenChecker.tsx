@@ -111,15 +111,13 @@ export default (props: TokenCheckerProps) => {
     <div className="content">
       <StudentModal result={result} showModal={showModal} setShowModal={setShowModal} />
 
-      <div>Scan a token to get the tagged student</div>
+      <h3>Scan a token to get the tagged student</h3>
       <div className="token">
-        <div>
-          <label htmlFor="tag">Token:</label>
-          <input id="tag" autoFocus={true} type="text" onChange={e => setTokenId(e.target.value)} value={tokenId} onKeyPress={handleEnter} />
-        </div>
+        <label htmlFor="tag">Token:</label>
+        <input id="tag" autoFocus={true} type="text" onChange={e => setTokenId(e.target.value)} value={tokenId} onKeyPress={handleEnter} />
       </div>
 
-      {!showQr && <button onClick={() => setShowQr(true)}>Use camera</button>}
+      {!showQr && <button className="camera" onClick={() => setShowQr(true)}>Use camera</button>}
       {showQr && <QrReader
         delay={100}
         onScan={data => {

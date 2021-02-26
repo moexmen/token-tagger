@@ -8,10 +8,7 @@ class StudentsController < ApplicationController
   end
 
   def list_students
-    if params["school"].nil? || params["school"] == ""
-      redirect_to :action => "list_schools"
-      return
-    end
+    return redirect_to :action => "list_schools" if params["school"].nil? || params["school"] == ""
 
     @students = Student.where(school_code: params[:school])
     @school = @students.first.school

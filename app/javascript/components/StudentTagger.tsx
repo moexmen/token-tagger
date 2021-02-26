@@ -165,15 +165,13 @@ export default (props: StudentTaggerProps) => {
           <div className="school">{student.school_name}</div>
         </div>
       </div>
-      <div>Scan a token to tag to this student.</div>
+      <b>Scan a token to tag to this student.</b>
       <div className="token">
-        <div>
-          <label htmlFor="tag">Token:</label>
-          <input id="tag" autoFocus={true} type="text" onChange={e => setTokenId(e.target.value)} value={tokenId} onKeyPress={handleEnter} />
-        </div>
+        <label htmlFor="tag">Token:</label>
+        <input id="tag" autoFocus={true} type="text" onChange={e => setTokenId(e.target.value)} value={tokenId} onKeyPress={handleEnter} />
       </div>
 
-      {!showQr && <button onClick={() => setShowQr(true)}>Use camera</button>}
+      {!showQr && <button className="camera" onClick={() => setShowQr(true)}>Use camera</button>}
       {showQr && <QrReader
         delay={100}
         onScan={data => {

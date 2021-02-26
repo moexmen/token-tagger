@@ -101,3 +101,11 @@ button {
     background-color: #eeeeee;
   }
 }
+
+@media (min-width:1280px) { 
+  button {
+    &.camera {
+      display: none;
+    }
+  }
+ }
