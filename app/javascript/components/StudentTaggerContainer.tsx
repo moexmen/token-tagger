@@ -51,6 +51,6 @@ export default (props: Props) => {
     }
   }
 
-  return <StudentTagger result={result} student={student} assignToken={assignToken} />
+  return <StudentTagger isFetching={isFetching} result={result} student={student} assignToken={assignToken} />
 }
 

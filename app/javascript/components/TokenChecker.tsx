@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import QrReader from 'react-qr-reader';
+import QrReader from 'modern-react-qr-reader';
+
 import Modal from './Modal';
 
 export enum Result {

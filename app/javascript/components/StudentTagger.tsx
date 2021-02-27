@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import QrReader from 'react-qr-reader';
+import QrReader from 'modern-react-qr-reader';
 
 import Modal from './Modal';
 
@@ -29,6 +29,7 @@ export interface Result {
 }
 
 interface StudentTaggerProps {
+  isFetching: boolean;
   result?: {
     success: boolean;
     reason: string;
@@ -98,13 +99,22 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
 }
 
 interface ResultModalProps {
+  isFetching: boolean;
   showModal: boolean;
   result?: Result;
   setShowModal: (show: boolean) => void;
 }
-const ResultModal = ({ result, showModal, setShowModal }: ResultModalProps ) => {
+const ResultModal = ({ result, showModal, isFetching, setShowModal }: ResultModalProps ) => {
   if (!showModal) {
     return null;
+  }
+
+  if (isFetching) {
+    return (
+      <Modal isOpen={showModal} parent={document.body}>
+        <div className="modal-body">Tagging student...</div>
+      </Modal>
+    );
   }
 
   return (
@@ -118,7 +128,7 @@ const ResultModal = ({ result, showModal, setShowModal }: ResultModalProps ) => 
 }
 
 export default (props: StudentTaggerProps) => {
-  const { student, result, assignToken } = props;
+  const { student, result, isFetching, assignToken } = props;
 
   const [tokenId, setTokenId] = useState('');
   const [showQr, setShowQr] = useState(false);
@@ -130,8 +140,8 @@ export default (props: StudentTaggerProps) => {
 
   useEffect(() => {
     // Show modal with result if result is available
-    setShowModal(result != null);
-  }, [result])
+    setShowModal(result != null || isFetching);
+  }, [result, isFetching])
 
   const handleEnter = e => {
     if (tokenId === '' || showModal) {
@@ -147,7 +157,7 @@ export default (props: StudentTaggerProps) => {
   if (student == null) {
     return (
       <div className="content">
-        <ResultModal result={result} showModal={showModal} setShowModal={setShowModal} />
+        <ResultModal isFetching={isFetching} result={result} showModal={showModal} setShowModal={setShowModal} />
         <div>Finshed tagging all students in this batch</div>
       </div>
     );
@@ -155,7 +165,7 @@ export default (props: StudentTaggerProps) => {
 
   return (
     <div className="content">
-      <ResultModal result={result} showModal={showModal} setShowModal={setShowModal} />
+      <ResultModal isFetching={isFetching} result={result} showModal={showModal} setShowModal={setShowModal} />
       
       <div className="student-details">
         <div className="serial-no">{student.serial_no}</div>
@@ -173,7 +183,7 @@ export default (props: StudentTaggerProps) => {
 
       {!showQr && <button className="camera" onClick={() => setShowQr(true)}>Use camera</button>}
       {showQr && <QrReader
-        delay={500}
+        delay={300}
         onScan={data => {
           if (showModal) {
             return;
