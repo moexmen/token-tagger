@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_24_110532) do
+ActiveRecord::Schema.define(version: 2021_02_27_020811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 2021_02_24_110532) do
     t.string "batch"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "serial_no", null: false
+    t.integer "serial_no", null: false
     t.boolean "contact_rejected", default: false
     t.jsonb "error_response"
     t.index ["nric"], name: "index_students_on_nric", unique: true

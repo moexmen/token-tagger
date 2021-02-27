@@ -15,7 +15,7 @@ export interface Student {
   id: number;
   school_code: string;
   school_name: string;
-  serial_no: string;
+  serial_no: number;
   name: string;
   class_name: string;
   level: string;

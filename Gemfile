@@ -33,6 +33,8 @@ gem 'bootsnap', '>= 1.4.4', require: false
 
 gem 'faraday'
 
+gem 'creek'
+
 group :development, :test do
   gem 'dotenv-rails'
 
