@@ -3,6 +3,7 @@
 # run rake data:load\[path_to_file\]
 desc 'Load data from excel file'
 namespace :data do
+  desc 'Load data from excel file'
   task :load, [:file] => :environment do |t, args|
     HEADERS = {
       serial_no: 'S/N',
@@ -73,6 +74,17 @@ namespace :data do
     Student.transaction do
       school.save!
       Student.insert_all(students)
+      puts "Inserted #{students.count} rows for #{school.name}"
+    end
+  rescue StandardError => e
+    puts "Error inserting data for #{args[:file]}", e
+  end
+
+  desc 'Load data from files'
+  task :load_files, [:files] => :environment do |t, args|
+    args[:files].split(',').each do |f|
+      puts "Loading data from #{f}"
+      Rake::Task["data:load"].invoke(f.strip)
     end
   end
 
