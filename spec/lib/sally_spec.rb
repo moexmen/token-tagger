@@ -6,6 +6,35 @@ RSpec.describe Sally::Client do
 
   let (:token_id) { '123456' }
 
+  describe 'transform_contact' do
+    let (:client) { Sally::Client.new }
+    
+    context 'numbers beginning with +' do
+      it { expect(client.send(:transform_contact, '+6591234567')).to eq('+6591234567') }
+      it { expect(client.send(:transform_contact, '+6111111111111')).to eq('+6111111111111') }
+    end
+    
+    context 'Singapore numbers missing +' do
+      it { expect(client.send(:transform_contact, '6591234567')).to eq('+6591234567') }
+      it { expect(client.send(:transform_contact, '6561234567')).to eq('+6561234567') }
+    end
+
+    context 'blank or nil contact' do
+      it { expect(client.send(:transform_contact, '')).to eq('+6588888888') }
+      it { expect(client.send(:transform_contact, nil)).to eq('+6588888888') }
+    end
+
+    context '8 digit numbers' do
+      it { expect(client.send(:transform_contact, '91234567')).to eq('+6591234567') }
+      it { expect(client.send(:transform_contact, '12345678')).to eq('+6512345678') }
+    end
+
+    context 'numbers with other number of digits' do
+      it { expect(client.send(:transform_contact, '123456')).to eq('123456') }
+      it { expect(client.send(:transform_contact, '123456789')).to eq('123456789') }
+    end
+  end
+
   describe 'assign_token' do
     let (:student) { FactoryBot.create(:student) }
 

@@ -13,7 +13,7 @@ module Sally
     INVALID_NRIC = 'Invalid Customer Id'.freeze
     INVALID_CONTACT = 'Invalid Purchase Request: Invalid identifier format'.freeze
 
-    CONTACT_PLACEHOLDER = '88888888'
+    CONTACT_PLACEHOLDER = '+6588888888'
 
     def initialize(endpoint = '', client_secret = '')
       @endpoint = endpoint
@@ -24,10 +24,8 @@ module Sally
       student = Student.find_by(nric: nric)
       return { success: true } if student.assigned?
 
-      if contact.blank?
-        contact = CONTACT_PLACEHOLDER
-        contact_rejected = true
-      end
+      contact = transform_contact(contact)
+      contact_rejected = contact == CONTACT_PLACEHOLDER
 
       response = send_request(token_id, nric, contact)
 
@@ -42,6 +40,14 @@ module Sally
     end
 
     private
+
+    def transform_contact(contact)
+      return CONTACT_PLACEHOLDER if contact.blank?
+      return "+65#{contact}" if contact.match(/^\d{8}$/) #prepend +65 to 8 digit numbers
+      return "+#{contact}" if contact.match(/^65\d{8}$/) #prepend +65 to 8 digit numbers
+
+      contact
+    end
 
     def handle_response(student, token_id, contact_rejected, response)
       body = JSON.parse(response.body) unless response.body.blank?
