@@ -7,6 +7,7 @@ module Sally
   
   class Client
     TOKEN_ALREADY_ASSIGNED_MESSAGE = 'Invalid Purchase Request: Duplicate identifier inputs'.freeze
+    TOKEN_ALREADY_USED_MESSAGE = 'Invalid Purchase Request: Item already used'.freeze # Similiar to token already assigned, just that the SIOT API call failed. But it's the same to us.
     INVALID_TOKEN_MESSAGE = 'Invalid Purchase Request: Item not found'.freeze
     PERSON_QUOTA_REACHED = 'Exceeded limit. Please check the items before checking out.'.freeze
     INVALID_NRIC = 'Invalid Customer Id'.freeze
@@ -77,6 +78,8 @@ module Sally
    def message_to_reason(message)
     case message
     when TOKEN_ALREADY_ASSIGNED_MESSAGE
+      Sally::TOKEN_ALREADY_ASSIGNED
+    when TOKEN_ALREADY_USED_MESSAGE
       Sally::TOKEN_ALREADY_ASSIGNED
     when INVALID_TOKEN_MESSAGE
       Sally::INVALID_TOKEN

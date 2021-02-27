@@ -26,6 +26,14 @@ RSpec.describe Sally::Client do
       it { expect(subject).to eq({ success: false, reason: Sally::TOKEN_ALREADY_ASSIGNED }) }
       it { expect{ subject }.not_to change{ student.reload.token_id } }
       it { expect{ subject }.not_to change{ student.reload.status } }
+    end
+
+    context 'token already assigned to someone else - alternative message' do  
+      before { stub_request(:post, endpoint).to_return(status: 400,  body: { message: Sally::Client::TOKEN_ALREADY_USED_MESSAGE }.to_json ) }
+    
+      it { expect(subject).to eq({ success: false, reason: Sally::TOKEN_ALREADY_ASSIGNED }) }
+      it { expect{ subject }.not_to change{ student.reload.token_id } }
+      it { expect{ subject }.not_to change{ student.reload.status } }
     end 
   
     context 'student already has token' do  
