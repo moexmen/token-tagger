@@ -1,0 +1,24 @@
+<a href="<%= url_for controller: 'students', action: 'show' %>">Check student tagged to token</a>
+
+<% if @students.length > 0 %>
+  <h2><%= @students.first.school.code %> <%=  @students.first.school.name %></h2>
+<% end %>
+
+<h3>Students to be assigned tokens</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Serial</th><th>Level</th><th>Class</th><th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @students.each do |student| %>
+      <tr>
+        <td><%= student.serial_no %></td>
+        <td><%= student.level %></td>
+        <td><%= student.class_name %></td>
+        <td><a href="<%= url_for controller: 'students', action: 'next_student', serial_no: student.serial_no, school: student.school_code %>"><%= student.name %></a></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

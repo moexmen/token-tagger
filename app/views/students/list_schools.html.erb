@@ -1,18 +1,23 @@
-<h1>Schools</h1>
+<a href="<%= url_for controller: 'students', action: 'show' %>">Check student tagged to token</a>
 
+<h1>Schools</h1>
 <table>
   <thead>
     <tr>
-      <th>School code</th><th>School cluster</th><th>School name</th>
+      <th>Cluster</th>
+      <th>School name</th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <% @schools.each do |school| %>
       <tr>
-        <td><%= school.code %></td>
         <td><%= school.cluster %></td>
-        <td><a href="<%= url_for controller: 'students', action: 'list_students', school: school.code %>"><%= school.name %></a></td>
-        <td>
+        <td><%= school.name %></td>
+        <td><a href="<%= url_for controller: 'students', action: 'taggable_students', school: school.code %>">Tag students</a></td>
+        <td><a href="<%= url_for controller: 'students', action: 'list_students', school: school.code %>">See summary</a></td>
       </tr>
     <%= %>
   <% end %>

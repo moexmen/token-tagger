@@ -1,8 +1,5 @@
-<h1>Students</h1>
-<a href="<%= url_for controller: 'students', action: 'show' %>">Check student tagged to token</a>
-
 <% if @students.length > 0 %>
-  <h2><%= @school.code %> <%= @school.name %></h2>
+  <h2><%= @students.first.school.code %> <%=  @students.first.school.name %></h2>
 <% end %>
 
 <table class="borders">
@@ -21,29 +18,35 @@
 </table>
 
 <table>
-<thead>
-<tr>
-<th>Serial</th><th>Level</th><th>Class</th><th>Name</th><th>Status</th>
-</tr>
-</thead>
-<tbody>
-  <% @students.order(serial_no: :asc).each do |student| %>
+  <thead>
     <tr>
-      <td><%= student.serial_no %></td>
-      <td><%= student.level %></td>
-      <td><%= student.class_name %></td>
-      <td><a href="<%= url_for controller: 'students', action: 'next_student', serial_no: student.serial_no, school: student.school_code %>"><%= student.name %></a></td>
-      
-      <% if student.status == 'pending' %>
-        <td class="bg-grey">Pending tagging</td>
-      <% elsif student.status == 'assigned' %>
-        <td class="bg-green">Successfully tagged</td>
-      <% elsif student.status == 'error_quota' %>
-        <td class="bg-yellow">Student already collected a token</td>
-      <% elsif %>
-       <td><%= student.status %></td>
-      <% end %>
+      <th>Serial</th><th>Level</th><th>Class</th><th>Name</th><th>Status</th>
     </tr>
-  <% end %>
-</tbody>
+  </thead>
+  <tbody>
+    <% @students.each do |student| %>
+      <tr>
+        <td><%= student.serial_no %></td>
+        <td><%= student.level %></td>
+        <td><%= student.class_name %></td>
+        <td><%= student.name %></td>
+        
+        <% if student.status == 'pending' %>
+          <td class="bg-grey">
+            <a href="<%= url_for controller: 'students', action: 'next_student', serial_no: student.serial_no, school: student.school_code %>">
+              Pending tagging
+            </a>
+          </td>
+        <% elsif student.status == 'assigned' %>
+          <td class="bg-green">Successfully tagged</td>
+        <% elsif student.status == 'error_quota' %>
+          <td class="bg-yellow">Student already collected a token</td>
+        <% elsif student.status == 'error_nric' %>
+          <td class="bg-red">Invalid NRIC</td>
+        <% elsif %>
+          <td><%= student.status %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
 </table>

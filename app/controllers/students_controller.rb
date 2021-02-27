@@ -11,8 +11,13 @@ class StudentsController < ApplicationController
     return redirect_to :action => "list_schools" if params["school"].nil? || params["school"] == ""
 
     @students = Student.where(school_code: params[:school])
-    @school = @students.first.school
     @statuses = @students.group(:status).count
+
+    @students = @students.order(serial_no: :asc)
+  end
+
+  def taggable_students
+    @students = Student.taggable.where(school_code: params[:school])
   end
 
 
