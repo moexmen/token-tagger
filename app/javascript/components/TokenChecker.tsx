@@ -52,7 +52,7 @@ const StudentModal = ({ result, showModal, setShowModal }: StudentModalProps ) =
     body = (
       <>
         <h3>No student found</h3>
-        <div>Seems like this token has not been assigned.</div>;
+        <div>Seems like this token has not been assigned.</div>
       </>
     ); 
   } else {

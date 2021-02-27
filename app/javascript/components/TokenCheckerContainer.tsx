@@ -26,7 +26,7 @@ export default () => {
         .then(data => {
           setIsFetching(false);
           
-          if (data == null) {
+          if (data.student == null) {
             setResult({
               result: Result.NoMatch,
               student: null
