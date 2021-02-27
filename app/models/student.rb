@@ -7,7 +7,7 @@ class Student < ApplicationRecord
 
   def next
     next_student = Student.taggable.where.not(id: id).where(school_code: school_code).where('serial_no >= ?', serial_no)
-    unless batch.empty?
+    unless batch.blank?
       next_student = next_student.where(batch: batch)
     end
     

@@ -20,6 +20,9 @@ module Sally
     end
 
     def assign_token(token_id, nric, contact)
+      student = Student.find_by(nric: nric)
+      return { success: true } if student.assigned?
+
       if contact.blank?
         contact = CONTACT_PLACEHOLDER
         contact_rejected = true
@@ -34,45 +37,57 @@ module Sally
         response = send_request(token_id, nric, CONTACT_PLACEHOLDER)
       end
 
-      student = Student.where(nric: nric)
+      handle_response(student, token_id, contact_rejected, response)
+    end
+
+    private
+
+    def handle_response(student, token_id, contact_rejected, response)
+      body = JSON.parse(response.body) unless response.body.blank?
+      message = body['message'] unless body.blank?
+
       if response.status == 200
         student.update({token_id: token_id, status: Student.statuses[:assigned], contact_rejected: contact_rejected})
         return { success: true }
       end
-      
-      if response.body.blank?
-        student.update({contact_rejected: contact_rejected})
-        return { success: false, reason: Sally::API_ERROR }
-      end
-      
-      body = JSON.parse(response.body)
-      reason = case body['message']
-      when TOKEN_ALREADY_ASSIGNED_MESSAGE
-        Sally::TOKEN_ALREADY_ASSIGNED
-      when INVALID_TOKEN_MESSAGE
-        Sally::INVALID_TOKEN
-      when INVALID_NRIC
-        Sally::INVALID_NRIC
-      when PERSON_QUOTA_REACHED
-        Sally::PERSON_HAS_TOKEN
-      else
-        Sally::API_ERROR
+
+      if student.reload.assigned?
+        return { success: true }
       end
 
-      status = if reason == Sally::PERSON_HAS_TOKEN
-                Student.statuses[:error_quota]
-               elsif reason == Sally::INVALID_NRIC
-                Student.statuses[:error_nric]
-               else
-                Student.statuses[:pending]
-               end
+      reason = message_to_reason(message)
+      status = reason_to_status(reason)
 
       student.update({ status: status, error_response: body, contact_rejected: contact_rejected })
 
-      { success: false, reason: reason }
+      return { success: false, reason: reason }
     end
 
-    private
+    def reason_to_status(reason)
+      case reason
+      when Sally::PERSON_HAS_TOKEN
+        Student.statuses[:error_quota]
+      when Sally::INVALID_NRIC
+        Student.statuses[:error_nric]
+      else
+        Student.statuses[:pending]
+      end
+    end
+
+   def message_to_reason(message)
+    case message
+    when TOKEN_ALREADY_ASSIGNED_MESSAGE
+      Sally::TOKEN_ALREADY_ASSIGNED
+    when INVALID_TOKEN_MESSAGE
+      Sally::INVALID_TOKEN
+    when INVALID_NRIC
+      Sally::INVALID_NRIC
+    when PERSON_QUOTA_REACHED
+      Sally::PERSON_HAS_TOKEN
+    else
+      Sally::API_ERROR
+    end
+   end
 
     def send_request(token_id, nric, contact)
       headers = {

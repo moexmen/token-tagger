@@ -173,7 +173,7 @@ export default (props: StudentTaggerProps) => {
 
       {!showQr && <button className="camera" onClick={() => setShowQr(true)}>Use camera</button>}
       {showQr && <QrReader
-        delay={100}
+        delay={500}
         onScan={data => {
           if (showModal) {
             return;

@@ -43,5 +43,13 @@ RSpec.describe Sally::Client do
       it { expect{ subject }.not_to change{ student.reload.token_id } }
       it { expect{ subject }.to change{ student.reload.status }.from('pending').to('error_nric') }
     end
+
+    context 'HTTP 500 without body from API' do  
+      before { stub_request(:post, endpoint).to_return(status: 500) }
+    
+      it { expect(subject).to eq({ success: false, reason: Sally::API_ERROR }) }
+      it { expect{ subject }.not_to change{ student.reload.token_id } }
+      it { expect{ subject }.not_to change{ student.reload.status } }
+    end
   end
 end
