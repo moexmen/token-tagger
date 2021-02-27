@@ -50,6 +50,12 @@ namespace :data do
         puts "Cleaned contact #{contact} for #{row.values}"
       end
 
+      status = if valid_nric?(row)
+                Student.statuses[:pending]
+               else
+                Student.statuses[:error_nric]
+               end
+
       students.push({
         school_code: row[HEADERS[:school_code]],
         level: row[HEADERS[:level]],
@@ -57,7 +63,7 @@ namespace :data do
         nric: row[HEADERS[:nric]],
         name: row[HEADERS[:name]],
         contact: row[HEADERS[:contact_number]],
-        status: Student.statuses[:pending],
+        status: status,
         serial_no: row[HEADERS[:serial_no]],
         created_at: Time.now,
         updated_at: Time.now
@@ -94,8 +100,7 @@ namespace :data do
   end
 
   def valid_nric?(row)
-    # TODO
-    true
+    IdentifierValidator.valid_format?(row[HEADERS[:nric]])
   end
 
   def clean_contact!(row)
