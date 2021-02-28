@@ -137,7 +137,7 @@ export default (props: StudentTaggerProps) => {
   const tokenInputRef = React.useRef(null);
 
   useEffect(() => {
-    if (!showModal) {
+    if (!showModal && tokenInputRef.current) {
       tokenInputRef.current.focus();
     }
   }, [showModal])

@@ -22,26 +22,30 @@ class StudentsController < ApplicationController
 
 
   def next_student
-    @student = Student.taggable
+    student = Student.taggable
     if params[:batch]
-      @student = @student.where(batch: params[:batch])
+      student = student.where(batch: params[:batch])
     elsif params[:school]
-      @student = @student.where(school: params[:school])
+      student = student.where(school: params[:school])
       if params[:serial_no]
-        @student = @student.where('serial_no >= ?', params[:serial_no])
+        student = student.where('serial_no >= ?', params[:serial_no])
       end
     end
-    @student = @student.first
-    @student_json = {
-      id: @student.id,
-      school_code: @student.school_code,
-      school_name: @student.school.name,
-      serial_no: @student.serial_no,
-      name: @student.name,
-      class_name: @student.class_name,
-      level: @student.level,
-      batch: @student.batch
-    }
+    student = student.first
+    @student_json = if student.nil?
+                      nil
+                    else
+                      {
+                        id: student.id,
+                        school_code: student.school_code,
+                        school_name: student.school.name,
+                        serial_no: student.serial_no,
+                        name: student.name,
+                        class_name: student.class_name,
+                        level: student.level,
+                        batch: student.batch
+                      }
+                    end
   end
 
   def tag
