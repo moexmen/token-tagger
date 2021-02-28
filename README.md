@@ -4,7 +4,7 @@ Attempt to streamline the process of assigning TT tokens to students so as to re
 
 Idea: Instead of scanning 3 (TT token, nric, contact number) items in SupplyAlly, this app will keep track of the students to be tagged, so it sufficies to just scan the TT token
 
-# Setup
+## Setup
 1. Copy `.env.example` to `.env` and set the variables accordingly.
 1. Install gem dependencies
     - `bundle install`
@@ -37,3 +37,13 @@ Make sure that an instance of postgres is running. An instance of postgres can b
     ```
     make schema
     ```
+
+## Operations
+
+Load a single Excel file:
+
+`bin/rails 'data:load[./27Feb5pm/S2-2-Fairfield\ Methodist\ Primary\ School\ \(HQ\).xlsx]'`
+
+Load all Excel files in a directory:
+
+`find ./27Feb5pm/ -mindepth 1 -type f -print0 | xargs -0 -I{} bin/rails 'data:load[{}]';`

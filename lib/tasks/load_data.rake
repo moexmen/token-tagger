@@ -25,7 +25,7 @@ namespace :data do
     sheets = xls.sheets
 
     if sheets.length != 1
-      puts "Unexpected number of sheets: #{sheets.length}", args[:file]
+      puts "Unexpected number of sheets: #{sheets.length} in #{args[:file]}"
       return
     end
 
@@ -33,29 +33,68 @@ namespace :data do
     school = nil
     students = []
     sheet.simple_rows.each_with_index do |row, idx|
-      break if idx == 0 && !check_headers(HEADERS, row)
-      next if idx == 0
+      if idx == 0
+        if !check_headers(HEADERS, row)
+          puts "Something is wrong with the headers in #{args[:file]}"
+          return
+        end
+        next
+      end
 
       row.transform_keys! { |k| strip_spaces(k) }
 
+      # hard validation checks
       if !include_row?(row)
         puts "Skipped #{row.values}"
         next
       end
       
-      school = School.new({ code: row[HEADERS[:school_code]], name: row[HEADERS[:school_name]], cluster: row[HEADERS[:school_cluster]] }) if school.nil?
+      if school.nil?
+        school = School.new({ code: row[HEADERS[:school_code]], name: row[HEADERS[:school_name]], cluster: row[HEADERS[:school_cluster]] })
+      end
       
-      contact = row[HEADERS[:contact_number]].clone
-      clean_contact!(row)
-      if contact.strip != row[HEADERS[:contact_number]]
-        puts "Cleaned contact #{contact} for #{row.values}"
+      ### process contact numbers
+
+      if row[HEADERS[:contact_number]].nil?
+        # soft validation - blank contact should not happen, but is permitted
+        # however, still substitute it with placeholder value (.dup to avoid frozen String)
+        # the +65 will be added later
+        puts "Blank contact for #{row.values}"
+        row[HEADERS[:contact_number]] = "88888888".dup
+      elsif row[HEADERS[:contact_number]].class == Integer
+        # this happens if the cell is formatted as Number instead of General
+        # coerce to string so that gsub doesn't break
+        row[HEADERS[:contact_number]] = row[HEADERS[:contact_number]].to_s
       end
 
-      status = if valid_nric?(row)
-                Student.statuses[:pending]
-               else
-                Student.statuses[:error_nric]
-               end
+      orig_contact = row[HEADERS[:contact_number]].clone
+      clean_contact!(row)
+      if orig_contact.strip != row[HEADERS[:contact_number]]
+        puts "Cleaned contact #{orig_contact} for #{row.values}"
+      end
+
+      # format local phone numbers
+      # also do soft validation - highlight numbers or non-local numbers for human checks
+      if row[HEADERS[:contact_number]].match(/^\d{8}$/)
+        row[HEADERS[:contact_number]] = "+65#{row[HEADERS[:contact_number]]}"
+      elsif row[HEADERS[:contact_number]].match(/^\+\d*$/)
+        puts "Contact is international-looking and may require manual review #{row[HEADERS[:contact_number]]} for #{row.values}"
+      else
+        puts "Contact is not 8-digit yet also not international #{row[HEADERS[:contact_number]]} for #{row.values}"
+      end
+
+      ### process nric
+
+      # some of entries have whitespace around it
+      row[HEADERS[:nric]] = strip_spaces(row[HEADERS[:nric]])
+
+      # semi-hard validation of NRIC -- while we still load the row, it has error status immediately set
+      if valid_nric?(row)
+        status = Student.statuses[:pending]
+      else
+        puts "Invalid NRIC #{row[HEADERS[:nric]]} #{row[HEADERS[:nric]].chars.map(&:ord)} for #{row.values}"
+        status = Student.statuses[:error_nric]
+      end
 
       students.push({
         school_code: row[HEADERS[:school_code]],
@@ -74,10 +113,10 @@ namespace :data do
     Student.transaction do
       school.save!
       Student.insert_all(students)
-      puts "Inserted #{students.count} rows for #{school.name}"
+      puts "Inserted #{students.count} rows for #{school.name} from #{args[:file]}"
     end
   rescue StandardError => e
-    puts "Error inserting data for #{args[:file]}", e
+    puts "Error inserting data for #{args[:file]}", e, e.backtrace
   end
 
   desc 'Load data from files'
@@ -89,7 +128,11 @@ namespace :data do
   end
 
   def strip_spaces(s)
-    s.gsub(/\s+/, '')
+    if !s.nil?
+      # instead of \s which covers ASCII whitespace, use [[:space:]] to also cover
+      # other Unicode whitespace characters (especially &nbsp;)
+      s.gsub(/[[:space:]]+/, '')
+    end
   end
 
   def check_headers(headers, header_row)
@@ -104,7 +147,17 @@ namespace :data do
   end
 
   def include_row?(row)
-    return false if row[HEADERS[:token_requested]] != 'Y'
+    return false if row[HEADERS[:serial_no]].nil?
+    return false if row[HEADERS[:school_code]].nil?
+    return false if row[HEADERS[:nric]].nil?
+    return false if row[HEADERS[:token_requested]].nil?
+
+    token_requested = strip_spaces(row[HEADERS[:token_requested]]).upcase
+    return false if token_requested != 'Y' && token_requested != 'YES'
+    
+    # these columns reflect that they think token was collected before at various
+    # points.
+    # only reject Y, as it may be legitly blank in some cases
     return false if row[HEADERS[:govtech]] == 'Y'
     return false if row[HEADERS[:token_taken]] == 'Y'
 
