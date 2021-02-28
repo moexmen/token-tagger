@@ -32,6 +32,16 @@ class StudentsController < ApplicationController
       end
     end
     @student = @student.first
+    @student_json = {
+      id: @student.id,
+      school_code: @student.school_code,
+      school_name: @student.school.name,
+      serial_no: @student.serial_no,
+      name: @student.name,
+      class_name: @student.class_name,
+      level: @student.level,
+      batch: @student.batch
+    }
   end
 
   def tag
