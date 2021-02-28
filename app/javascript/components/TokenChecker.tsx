@@ -91,6 +91,14 @@ export default (props: TokenCheckerProps) => {
   const [showQr, setShowQr] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  const tokenInputRef = React.useRef(null);
+
+  useEffect(() => {
+    if (!showModal) {
+      tokenInputRef.current.focus();
+    }
+  }, [showModal])
+
   useEffect(() => {
     setTokenId('');
     // Show modal with student if result is available
@@ -115,7 +123,7 @@ export default (props: TokenCheckerProps) => {
       <h3>Scan a token to get the tagged student</h3>
       <div className="token">
         <label htmlFor="tag">Token:</label>
-        <input id="tag" autoFocus={true} type="text" onChange={e => setTokenId(e.target.value)} value={tokenId} onKeyPress={handleEnter} />
+        <input id="tag" autoFocus={true} type="text" ref={tokenInputRef} onChange={e => setTokenId(e.target.value)} value={tokenId} onKeyPress={handleEnter} />
       </div>
 
       {!showQr && <button className="camera" onClick={() => setShowQr(true)}>Use camera</button>}

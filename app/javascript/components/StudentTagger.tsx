@@ -134,6 +134,14 @@ export default (props: StudentTaggerProps) => {
   const [showQr, setShowQr] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  const tokenInputRef = React.useRef(null);
+
+  useEffect(() => {
+    if (!showModal) {
+      tokenInputRef.current.focus();
+    }
+  }, [showModal])
+
   useEffect(() => {
     setTokenId('');
   }, [student])
@@ -178,7 +186,7 @@ export default (props: StudentTaggerProps) => {
       <b>Scan a token to tag to this student.</b>
       <div className="token">
         <label htmlFor="tag">Token:</label>
-        <input id="tag" autoFocus={true} type="text" onChange={e => setTokenId(e.target.value)} value={tokenId} onKeyPress={handleEnter} />
+        <input id="tag" autoFocus={true} type="text" onChange={e => setTokenId(e.target.value)} value={tokenId} onKeyPress={handleEnter} ref={tokenInputRef} />
       </div>
 
       {!showQr && <button className="camera" onClick={() => setShowQr(true)}>Use camera</button>}
