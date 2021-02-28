@@ -40,7 +40,7 @@ class StudentsController < ApplicationController
     @student = Student.taggable.find_by(id: params[:student_id])
     return head :bad_request if @student.nil?
 
-    @result = client.assign_token(params[:token_id], @student.nric, @student.contact)
+    @result = client.assign_token(params[:token_id], @student)
 
     if @result[:success] || @result[:reason] == Sally::PERSON_HAS_TOKEN || @result[:reason] == Sally::INVALID_NRIC
       @next_student = @student.next

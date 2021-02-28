@@ -38,7 +38,7 @@ RSpec.describe Sally::Client do
   describe 'assign_token' do
     let (:student) { FactoryBot.create(:student) }
 
-    subject { Sally::Client.new(endpoint, api_key).assign_token(token_id, student.nric, student.contact) }
+    subject { Sally::Client.new(endpoint, api_key).assign_token(token_id, student) }
 
     context 'token successfully assigned' do
   

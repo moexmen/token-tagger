@@ -20,20 +20,19 @@ module Sally
       @client_secret = client_secret
     end
 
-    def assign_token(token_id, nric, contact)
-      student = Student.find_by(nric: nric)
+    def assign_token(token_id, student)
       return { success: true } if student.assigned?
 
-      contact = transform_contact(contact)
+      contact = transform_contact(student.contact)
       contact_rejected = contact == CONTACT_PLACEHOLDER
 
-      response = send_request(token_id, nric, contact)
+      response = send_request(token_id, student.nric, contact)
 
       contact_rejected = false
       body = JSON.parse(response.body) unless response.body.blank?
       if body && body['message'] === INVALID_CONTACT
         contact_rejected = true
-        response = send_request(token_id, nric, CONTACT_PLACEHOLDER)
+        response = send_request(token_id, student.nric, CONTACT_PLACEHOLDER)
       end
 
       handle_response(student, token_id, contact_rejected, response)
@@ -137,8 +136,7 @@ module Sally
       @client_secret = client_secret
     end
     
-    def assign_token(token_id, nric, contact)
-      student = Student.where(nric: nric)
+    def assign_token(token_id, student)
       student.update({token_id: token_id, status: Student.statuses[:assigned]})
       { success: true }
     end

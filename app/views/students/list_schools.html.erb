@@ -17,7 +17,7 @@
         <td><%= school.cluster %></td>
         <td><%= school.name %></td>
         <td><a href="<%= url_for controller: 'students', action: 'taggable_students', school: school.code %>">Tag students</a></td>
-        <td><a href="<%= url_for controller: 'students', action: 'list_students', school: school.code %>">See summary</a></td>
+        <td><a href="<%= url_for controller: 'students', action: 'list_students', school: school.code %>">View summary</a></td>
       </tr>
     <%= %>
   <% end %>
