@@ -35,6 +35,8 @@ module Sally
         response = send_request(token_id, student.nric, CONTACT_PLACEHOLDER)
       end
 
+      Rails.logger.info { { student_id: student.id, student_name: student.name, response: response.body } }
+
       handle_response(student, token_id, contact_rejected, response)
     end
 
