@@ -4,7 +4,7 @@ class StudentsController < ApplicationController
   protect_from_forgery except: :show
 
   def list_schools
-    @schools = School.all
+    @schools = School.all.order(name: :asc)
   end
 
   def list_students
