@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_01_084745) do
+ActiveRecord::Schema.define(version: 2021_03_01_103617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2021_03_01_084745) do
     t.jsonb "error_response"
     t.datetime "tagged_at"
     t.index ["nric"], name: "index_students_on_nric", unique: true
+    t.index ["school_code"], name: "index_students_on_school_code"
     t.index ["token_id"], name: "index_students_on_token_id", unique: true
   end
 
