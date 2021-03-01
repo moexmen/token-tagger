@@ -49,12 +49,12 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
     cssClass = 'banner warning';
   }
 
-  const student = `${result.student.serial_no} (${result.student.class_name}) ${result.student.name}`;
+  const student = <span><b>{result.student.serial_no}</b>{` | ${result.student.class_name} | ${result.student.name}`}</span>;
   if (result.success) {
     return (
       <div className={cssClass}>
         <h3>Success</h3>
-        <p><span>{student}</span> has been tagged to the token.</p>
+        <p>{student} has been tagged to the token.</p>
         <p>Please label the token for this student.</p>
       </div>
     );
@@ -62,7 +62,7 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
     return (
       <div className={cssClass}>
         <h3>Student error</h3>
-        <p><span>{student}</span> already has a token.</p>
+        <p>{student} already has a token.</p>
         <p>Please assign this token to another student</p>
       </div>
     );
@@ -71,7 +71,7 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
     return (
       <div className={cssClass}>
         <h3>Student error</h3>
-        <p><span>{student}</span>'s NRIC is invalid.</p>
+        <p>{student}'s NRIC is invalid.</p>
         <p>Please assign this token to another student</p>
       </div>
     );

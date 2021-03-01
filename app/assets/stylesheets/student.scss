@@ -55,6 +55,7 @@
     border-style: solid;
     border-right: none;
     padding: 0 4px;
+    font-size: 28px;
   }
 
   .student {
@@ -76,3 +77,8 @@
   }
 }
 
+.banner {
+  span {
+    font-size: 20px;
+  }
+}
