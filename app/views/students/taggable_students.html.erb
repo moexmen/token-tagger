@@ -1,8 +1,8 @@
-<a href="<%= url_for controller: 'students', action: 'show' %>">Check student tagged to token</a>
-
 <% if @students.length > 0 %>
   <h2><%= @students.first.school.code %> <%=  @students.first.school.name %></h2>
 <% end %>
+
+<a class="button" href="<%= url_for controller: 'students', action: 'show' %>">Check Tokens</a>
 
 <h3>Students to be assigned tokens</h3>
 <table>

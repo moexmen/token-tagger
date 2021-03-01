@@ -76,27 +76,3 @@
   }
 }
 
-button {
-  border-radius: 5px;
-  border: 2px;
-  background-color: #2196f3;
-  color: #ffffff;
-  cursor: pointer;
-  padding: 0 16px;
-  height: 42px;
-  vertical-align: middle;
-  text-align: center;
-  font-size: 20px;
-  
-  &:disabled {
-    background-color: #eeeeee;
-  }
-}
-
-@media (min-width:1280px) { 
-  button {
-    &.camera {
-      display: none;
-    }
-  }
- }
