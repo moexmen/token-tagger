@@ -55,7 +55,7 @@ module Sally
       message = body['message'] unless body.blank?
 
       if response.status == 200
-        student.update({token_id: token_id, status: Student.statuses[:assigned], contact_rejected: contact_rejected})
+        student.update({ token_id: token_id, status: Student.statuses[:assigned], contact_rejected: contact_rejected, tagged_at: Time.now })
         return { success: true }
       end
 
@@ -139,7 +139,7 @@ module Sally
     end
     
     def assign_token(token_id, student)
-      student.update({token_id: token_id, status: Student.statuses[:assigned]})
+      student.update({ token_id: token_id, status: Student.statuses[:assigned], tagged_at: Time.now })
       { success: true }
     end
   end
