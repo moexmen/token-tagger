@@ -1,0 +1,16 @@
+table {
+  border: 1px solid;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+thead {
+  text-align: left;
+  font-weight: 700;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: .5em;
+}
