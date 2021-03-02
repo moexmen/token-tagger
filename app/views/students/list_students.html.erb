@@ -5,20 +5,7 @@
 <a class="button" href="<%= url_for controller: 'students', action: 'show' %>">Check Tokens</a>
 
 <h3>Overview</h3>
-<table>
-  <tr>
-      <th>status</th>
-      <% @statuses.each do |k, v| %>
-        <td><%= k %></td>
-      <% end %>
-  </tr>
-  <tr>
-      <th>count</th>
-      <% @statuses.each do |k, v| %>
-      <td><%= v %></td>
-      <% end %>
-  </tr>
-</table>
+<%= render partial: 'partials/status_table', locals: { statuses: @statuses } %>
 
 <h3>Students</h3>
 <table>
