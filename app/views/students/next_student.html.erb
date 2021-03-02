@@ -1,1 +1,2 @@
+<a class="button" href="<%= url_for controller: 'students', action: 'show' %>" target="_blank">Check Tokens</a>
 <%= react_component("StudentTaggerContainer", { student: @student_json, csrfToken: form_authenticity_token }) %>
