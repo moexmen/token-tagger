@@ -7,15 +7,33 @@
     }
   }
 </script>
+
+<h2>Summary for <input type="date" onchange="goToDate(event)" value=<%= @date %>></h2>
+
 <% if @schools.empty? %>
   <h2>No schools tagged on <%= @date.strftime('%b %d (%a)') %></h2>
 <% end %>
 
-<h2>Summary for <input type="date" onchange="goToDate(event)" value=<%= @date %>></h2>
+<% if !@schools.empty? %>
+  <table>
+    <tr>
+      <th>School</th>
+      <th>Tagged on <%= @date.strftime('%m/%d') %></th>
+      <th>Total Tagged</th>
+      <th>Pending</th>
+      <th>Already collected</th>
+      <th>Total</th>
+    </tr>
 
-<% @schools.each do |school| %>
-  <h3><%= school.name %></h3>
-  <div><%= @date_counts[school.code]%> tagged on <%= @date.strftime('%b %d (%a)') %></div>
-  <h4>Overall status</h4>
-  <%= render partial: 'partials/status_table', locals: { statuses: @counts_by_school[school.code] } %>
+    <% @schools.each do |school| %>
+      <tr>
+        <td><%= school.name %></td>
+        <td><%= @date_counts[school.code] %></td>
+        <td><%= @counts_by_school[school.code]['assigned'] %></td>
+        <td><%= @counts_by_school[school.code]['pending'] %></td>
+        <td><%= @counts_by_school[school.code]['error_quota'] %></td>
+        <td><%= @counts_by_school[school.code].values.reduce(0, :+) %></td>
+      </tr>
+    <% end %>
+  </table>
 <% end %>
