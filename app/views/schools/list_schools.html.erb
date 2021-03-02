@@ -1,8 +1,11 @@
 <h1>Schools</h1>
 <a href="<%= url_for controller: 'schools', action: 'overall' %>">View today's summary</a>
-<table>
+
+<h2>Schools to tag</h2>
+<table class="auto-serial">
   <thead>
     <tr>
+      <th>#</th>
       <th>Cluster</th>
       <th>School name</th>
       <th>Number to Tag</th>
@@ -10,11 +13,35 @@
     </tr>
   </thead>
   <tbody>
-    <% @schools.each do |school| %>
+    <% @schools.filter{ |s| !@pending[s.code].blank? }.each do |school| %>
       <tr>
+        <td></td>
         <td><%= school.cluster %></td>
         <td><%= school.name %></td>
-        <td><%= @pending[school.code] || 0 %></td>
+        <td><%= @pending[school.code] %></td>
+        <td><a href="<%= url_for controller: 'students', action: 'taggable_students', school: school.code %>">Tag students</a></td>
+        <td><a href="<%= url_for controller: 'students', action: 'list_students', school: school.code %>">View summary</a></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>Completed Schools</h2>
+<table class="auto-serial">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Cluster</th>
+      <th>School name</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @schools.filter{ |s| @pending[s.code].blank? }.each do |school| %>
+      <tr>
+        <td></td>
+        <td><%= school.cluster %></td>
+        <td><%= school.name %></td>
         <td><a href="<%= url_for controller: 'students', action: 'taggable_students', school: school.code %>">Tag students</a></td>
         <td><a href="<%= url_for controller: 'students', action: 'list_students', school: school.code %>">View summary</a></td>
       </tr>
