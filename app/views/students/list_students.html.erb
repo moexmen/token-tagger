@@ -47,7 +47,7 @@
           <td class="bg-yellow">Student already collected a token</td>
         <% elsif student.status == 'error_nric' %>
           <td class="bg-red">Invalid NRIC</td>
-        <% elsif %>
+        <% else %>
           <td><%= student.status %></td>
         <% end %>
       </tr>

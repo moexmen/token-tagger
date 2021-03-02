@@ -1,0 +1,26 @@
+<table>
+  <tr>
+      <th>status</th>
+      <% statuses.each do |k, v| %>
+        <td>
+         <% if k == 'pending' %>
+          Pending
+        <% elsif k == 'assigned' %>
+          Tagged
+        <% elsif k == 'error_quota' %>
+          Already collected Token
+        <% elsif k == 'error_nric' %>
+          Invalid NRIC
+        <% else %>
+          <%= k %>
+        <% end %>
+        </td>
+      <% end %>
+  </tr>
+  <tr>
+      <th>count</th>
+      <% statuses.each do |k, v| %>
+      <td><%= v %></td>
+      <% end %>
+  </tr>
+</table>

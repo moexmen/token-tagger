@@ -1,0 +1,21 @@
+<script>
+  function goToDate(e) {
+    const date = e.target.value;
+    console.log(e, e.target.value)
+    if (date != null) {
+      window.location.href = `<%= url_for controller: 'schools', action: 'overall'%>/?date=${date}`;
+    }
+  }
+</script>
+<% if @schools.empty? %>
+  <h2>No schools tagged on <%= @date.strftime('%b %d (%a)') %></h2>
+<% end %>
+
+<h2>Summary for <input type="date" onchange="goToDate(event)" value=<%= @date %>></h2>
+
+<% @schools.each do |school| %>
+  <h3><%= school.name %></h3>
+  <div><%= @date_counts[school.code]%> tagged on <%= @date.strftime('%b %d (%a)') %></div>
+  <h4>Overall status</h4>
+  <%= render partial: 'partials/status_table', locals: { statuses: @counts_by_school[school.code] } %>
+<% end %>

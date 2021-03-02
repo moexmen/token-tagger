@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  root to: 'students#list_schools'
+  root to: 'schools#list_schools'
+  get 'overall', to: 'schools#overall'
   get 'student', to: 'students#show'
   get 'students', to: 'students#list_students'
   get 'taggable_students/:school', to: 'students#taggable_students'

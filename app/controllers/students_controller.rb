@@ -2,11 +2,6 @@ require 'json'
 
 class StudentsController < ApplicationController
   protect_from_forgery except: :show
-
-  def list_schools
-    @schools = School.all.order(name: :asc)
-  end
-
   def list_students
     return redirect_to :action => "list_schools" if params["school"].nil? || params["school"] == ""
 

@@ -1,9 +1,11 @@
 <h1>Schools</h1>
+<a href="<%= url_for controller: 'schools', action: 'overall' %>">View today's summary</a>
 <table>
   <thead>
     <tr>
       <th>Cluster</th>
       <th>School name</th>
+      <th>Number to Tag</th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -12,10 +14,10 @@
       <tr>
         <td><%= school.cluster %></td>
         <td><%= school.name %></td>
+        <td><%= @pending[school.code]%></td>
         <td><a href="<%= url_for controller: 'students', action: 'taggable_students', school: school.code %>">Tag students</a></td>
         <td><a href="<%= url_for controller: 'students', action: 'list_students', school: school.code %>">View summary</a></td>
       </tr>
-    <%= %>
-  <% end %>
+    <% end %>
   </tbody>
 </table>
