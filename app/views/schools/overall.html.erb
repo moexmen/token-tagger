@@ -35,5 +35,8 @@
         <td><%= @counts_by_school[school.code].values.reduce(0, :+) %></td>
       </tr>
     <% end %>
+    <tr>
+      <th>Total</th><td><%= @date_counts.values.reduce(0, :+) %></td>
+    </tr>
   </table>
 <% end %>
