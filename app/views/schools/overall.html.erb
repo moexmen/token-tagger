@@ -29,9 +29,9 @@
       <tr>
         <td><%= school.name %></td>
         <td><%= @date_counts[school.code] %></td>
-        <td><%= @counts_by_school[school.code]['assigned'] %></td>
-        <td><%= @counts_by_school[school.code]['pending'] %></td>
-        <td><%= @counts_by_school[school.code]['error_quota'] %></td>
+        <td><%= @counts_by_school[school.code]['assigned'] || 0 %></td>
+        <td><%= @counts_by_school[school.code]['pending'] || 0 %></td>
+        <td><%= @counts_by_school[school.code]['error_quota'] || 0 %></td>
         <td><%= @counts_by_school[school.code].values.reduce(0, :+) %></td>
       </tr>
     <% end %>
