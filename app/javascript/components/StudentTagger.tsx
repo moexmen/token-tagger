@@ -138,13 +138,11 @@ export default (props: StudentTaggerProps) => {
 
   useEffect(() => {
     if (!showModal && tokenInputRef.current) {
+      // Clear tokenId and set focus on token input field if modal is closed
+      setTokenId('');
       tokenInputRef.current.focus();
     }
   }, [showModal])
-
-  useEffect(() => {
-    setTokenId('');
-  }, [student])
 
   useEffect(() => {
     // Show modal with result if result is available
