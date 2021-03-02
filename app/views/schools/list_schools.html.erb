@@ -14,7 +14,7 @@
       <tr>
         <td><%= school.cluster %></td>
         <td><%= school.name %></td>
-        <td><%= @pending[school.code]%></td>
+        <td><%= @pending[school.code] || 0 %></td>
         <td><a href="<%= url_for controller: 'students', action: 'taggable_students', school: school.code %>">Tag students</a></td>
         <td><a href="<%= url_for controller: 'students', action: 'list_students', school: school.code %>">View summary</a></td>
       </tr>
