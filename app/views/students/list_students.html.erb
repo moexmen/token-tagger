@@ -5,7 +5,31 @@
 <a class="button" href="<%= url_for controller: 'students', action: 'show' %>">Check Tokens</a>
 
 <h3>Overview</h3>
-<%= render partial: 'partials/status_table', locals: { statuses: @statuses } %>
+<table>
+  <tr>
+    <th>Class</th>
+    <th>Tagged</th>
+    <th>Pending</th>
+    <th>Already Collected</th>
+    <th>Total</th>
+  </tr>
+  <tr>
+    <th>Whole School</th>
+    <td><%= @statuses['assigned'] || 0 %></td>
+    <td><%= @statuses['pending'] || 0 %></td>
+    <td><%= @statuses['error_quota'] || 0 %></td>
+    <td><%= @statuses.values.reduce(0, :+) %></td>
+  </tr>
+  <% @class_names.each do |c| %>
+    <tr>
+      <td><%= c %></td>
+      <td><%= @counts_by_class[c]['assigned'] || 0 %></td>
+      <td><%= @counts_by_class[c]['pending'] || 0 %></td>
+      <td><%= @counts_by_class[c]['error_quota'] || 0 %></td>
+      <td><%= @counts_by_class[c].values.reduce(0, :+) %></td>
+    </tr>
+  <% end %>
+</table>
 
 <h3>Students</h3>
 <table>

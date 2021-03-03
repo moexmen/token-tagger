@@ -5,10 +5,23 @@ class StudentsController < ApplicationController
   def list_students
     return redirect_to :action => "list_schools" if params["school"].nil? || params["school"] == ""
 
-    @students = Student.where(school_code: params[:school])
-    @statuses = @students.group(:status).count
+    @students = Student.where(school_code: params[:school]).order(serial_no: :asc)
 
-    @students = @students.order(serial_no: :asc)
+    @counts_by_class = {}
+    @statuses = {}
+    @students.each do |s|
+      class_name = s.class_name
+      status = s.status
+
+      @counts_by_class[class_name] = {} unless @counts_by_class.key?(class_name)
+      @counts_by_class[class_name][status] = 0 unless @counts_by_class[class_name].key?(status)
+      @counts_by_class[class_name][status] += 1
+
+
+      @statuses[status] = 0 unless @statuses.key?(status)
+      @statuses[status] += 1
+    end
+    @class_names = @counts_by_class.keys.sort
   end
 
   def taggable_students
