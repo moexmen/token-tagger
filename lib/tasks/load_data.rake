@@ -44,6 +44,10 @@ namespace :data do
       row.transform_keys! { |k| strip_spaces(k) }
 
       # hard validation checks
+      # though don't even check or log if the row is completely empty, esp for files with 1 mil sparse rows
+      if row.length == 0
+        next
+      end
       if !include_row?(row)
         puts "Skipped #{row.values}"
         next
@@ -111,9 +115,13 @@ namespace :data do
     end
 
     Student.transaction do
-      school.save!
-      Student.insert_all(students)
-      puts "Inserted #{students.count} rows for #{school.name} from #{args[:file]}"
+      if !school.nil?
+        school.save!
+        Student.insert_all(students)
+        puts "Inserted #{students.count} rows for #{school.name} from #{args[:file]}"
+      else
+        puts "No records in #{args[:file]}"
+      end
     end
   rescue StandardError => e
     puts "Error inserting data for #{args[:file]}", e, e.backtrace
@@ -159,7 +167,7 @@ namespace :data do
     # points.
     # only reject Y, as it may be legitly blank in some cases
     return false if row[HEADERS[:govtech]] == 'Y'
-    return false if row[HEADERS[:token_taken]] == 'Y'
+    #return false if row[HEADERS[:token_taken]] == 'Y'
 
     true
   end
@@ -169,6 +177,6 @@ namespace :data do
   end
 
   def clean_contact!(row)
-    row[HEADERS[:contact_number]].gsub!(/(-|\s+)/,'')
+    row[HEADERS[:contact_number]].gsub!(/[^\+0-9]/,'')
   end
 end
