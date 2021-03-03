@@ -170,16 +170,16 @@ export default (props: StudentTaggerProps) => {
   }
 
   const isNextClass = result?.student?.class_name != student.class_name;
+  const classCss = `class${isNextClass ? ' bold' : ''}`
 
   return (
     <div className="content">
       <ResultModal isFetching={isFetching} result={result} showModal={showModal} setShowModal={setShowModal} />
-      {isNextClass && <h3>{student.class_name}</h3>}
       <div className="student-details">
         <div className="serial-no">{student.serial_no}</div>
         <div className="student">
         <div className="school">{student.school_name}</div>
-          <div className="class">{student.class_name}</div>
+          <div className={classCss}>{student.class_name}</div>
           <div className="name">{student.name}</div>
         </div>
       </div>
