@@ -70,9 +70,17 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
     // For completeness. Should not happen if we validate the nric while seeding our DB
     return (
       <div className={cssClass}>
-        <h3>Student error</h3>
+        <h3>Student Error</h3>
         <p>{student}'s NRIC is invalid.</p>
         <p>Please assign this token to another student</p>
+      </div>
+    );
+  } else if (result.reason == FailureReasons.TokenAlreadyAssigned) {
+    return (
+      <div className={cssClass}>
+        <h3>Token Error</h3>
+        <p>The token has already been tagged to someone else.</p>
+        <p>Please scan with another token.</p>
       </div>
     );
   } else {
@@ -80,9 +88,6 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
     switch (result.reason) {
       case FailureReasons.InvalidToken:
         message = 'Invalid Token ID.';
-        break;
-      case FailureReasons.TokenAlreadyAssigned:
-        message = 'The token has already been tagged to someone else.';
         break;
       default:
         message = 'Something went wrong! Please try to scan the token again.';
