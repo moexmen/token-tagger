@@ -16,7 +16,7 @@
   <tbody>
     <tr>
       <th colspan="4">Total</th>
-      <td><%= @schools.map{ |s| @pending[s.code] }.filter{ |p| !p.nil? }.reduce(0, :+) %></td>
+      <td><%= @pending.values.reduce(0, :+) %></td>
       <td colspan="2"></td>
     </tr>
     <% @schools.filter{ |s| !@pending[s.code].blank? }.each do |school| %>
