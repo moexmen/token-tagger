@@ -11,32 +11,49 @@
 <h2>Summary for <input type="date" onchange="goToDate(event)" value=<%= @date %>></h2>
 
 <% if @schools.empty? %>
-  <h2>No schools tagged on <%= @date.strftime('%b %d (%a)') %></h2>
+  <h2>No schools tagged on <%= @date.strftime('%a %d %b') %></h2>
 <% end %>
 
 <% if !@schools.empty? %>
-  <table>
+  <table class="auto-serial">
     <tr>
-      <th>School</th>
-      <th>Tagged on <%= @date.strftime('%m/%d') %></th>
-      <th>Total Tagged</th>
+      <th rowspan="2">#</th>
+      <th rowspan="2">School</th>
+      <th rowspan="2">Tagged on <br><%= @date.strftime('%a %d %b') %></th>
+      <th rowspan="2">First/last tag time</th>
+      <th rowspan="2">Tags per hour</th>
+      <th colspan="4">Overall Across All Days</th>
+    </tr>
+    <tr>
+      <th>Tagged</th>
       <th>Pending</th>
-      <th>Already collected</th>
+      <th>Already Collected</th>
       <th>Total</th>
+    </tr>
+
+    <tr>
+      <th colspan="2">Total</th>
+      <td><%= @date_counts.values.reduce(0, :+) %></td>
+      <td colspan="7"></td>
     </tr>
 
     <% @schools.each do |school| %>
       <tr>
+        <td></td>
         <td><%= school.name %></td>
         <td><%= @date_counts[school.code] %></td>
+        <td>
+          <%= @date_firsts[school.code].try(:in_time_zone, 'Asia/Singapore').try(:strftime, '%H:%M:%S') %>
+          to
+          <%= @date_lasts[school.code].try(:in_time_zone, 'Asia/Singapore').try(:strftime, '%H:%M:%S') %>
+        </td>
+        <td><%= (@date_counts[school.code] / (@date_lasts[school.code] - @date_firsts[school.code]) * (60*60)).round(1) %></td>
         <td><%= @counts_by_school[school.code]['assigned'] || 0 %></td>
         <td><%= @counts_by_school[school.code]['pending'] || 0 %></td>
         <td><%= @counts_by_school[school.code]['error_quota'] || 0 %></td>
         <td><%= @counts_by_school[school.code].values.reduce(0, :+) %></td>
       </tr>
     <% end %>
-    <tr>
-      <th>Total</th><td><%= @date_counts.values.reduce(0, :+) %></td>
-    </tr>
+    
   </table>
 <% end %>

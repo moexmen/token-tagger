@@ -36,3 +36,11 @@ a {
     margin-bottom: 16px;
   }  
 }
+
+@media print {
+  a {
+    &.button {
+      display: none;
+    }
+  }
+}

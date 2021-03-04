@@ -10,6 +10,8 @@ class SchoolsController < ApplicationController
     @date = @date.in_time_zone('Asia/Singapore')
 
     @date_counts = Student.where(tagged_at: @date.beginning_of_day..@date.end_of_day).group(:school_code).count
+    @date_firsts = Student.where(tagged_at: @date.beginning_of_day..@date.end_of_day).group(:school_code).minimum(:tagged_at)
+    @date_lasts = Student.where(tagged_at: @date.beginning_of_day..@date.end_of_day).group(:school_code).maximum(:tagged_at)
     @schools = School.where(code: @date_counts.keys)
 
     @counts_by_school = {}

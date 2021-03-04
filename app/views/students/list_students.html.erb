@@ -1,5 +1,6 @@
 <% if @students.length > 0 %>
   <h2><%= @students.first.school.code %> <%=  @students.first.school.name %></h2>
+  <h4>Cluster: <%= @students.first.school.cluster %></h4>
 <% end %>
 
 <a class="button" href="<%= url_for controller: 'students', action: 'show' %>">Check Tokens</a>
@@ -15,7 +16,7 @@
     <th>Estimated Weight (g)</th>
   </tr>
   <tr>
-    <th>Whole School</th>
+    <th>TOTAL</th>
     <td><%= @statuses['assigned'] || 0 %></td>
     <td><%= @statuses['pending'] || 0 %></td>
     <td><%= @statuses['error_quota'] || 0 %></td>
@@ -56,7 +57,7 @@
             </a>
           </td>
         <% elsif student.status == 'assigned' %>
-          <td class="bg-green">Tagged at <%= student.tagged_at.try(:in_time_zone, 'Asia/Singapore').try(:strftime, '%b %d (%a), %H:%M') %></td>
+          <td class="bg-green">Tagged at <%= student.tagged_at.try(:in_time_zone, 'Asia/Singapore').try(:strftime, '%a %d %b %H:%M') %></td>
         <% elsif student.status == 'error_quota' %>
           <td class="bg-yellow">Student already collected a token</td>
         <% elsif student.status == 'error_nric' %>

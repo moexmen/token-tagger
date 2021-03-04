@@ -1,22 +1,29 @@
 <h1>Schools</h1>
 <a href="<%= url_for controller: 'schools', action: 'overall' %>">View today's summary</a>
 
-<h2>Schools to tag</h2>
+<h2>Schools Remaining</h2>
 <table class="auto-serial">
   <thead>
     <tr>
       <th>#</th>
       <th>Cluster</th>
-      <th>School name</th>
-      <th>Number to Tag</th>
+      <th>School Code</th>
+      <th>School Name</th>
+      <th>Remaining</th>
       <th colspan="2"></th>
     </tr>
   </thead>
   <tbody>
+    <tr>
+      <th colspan="4">Total</th>
+      <td><%= @schools.map{ |s| @pending[s.code] }.reduce(0, :+) %></td>
+      <td colspan="2"></td>
+    </tr>
     <% @schools.filter{ |s| !@pending[s.code].blank? }.each do |school| %>
       <tr>
         <td></td>
         <td><%= school.cluster %></td>
+        <td><%= school.code %></td>
         <td><%= school.name %></td>
         <td><%= @pending[school.code] %></td>
         <td><a href="<%= url_for controller: 'students', action: 'taggable_students', school: school.code %>">Tag students</a></td>
@@ -32,7 +39,8 @@
     <tr>
       <th>#</th>
       <th>Cluster</th>
-      <th>School name</th>
+      <th>School Code</th>
+      <th>School Name</th>
       <th></th>
     </tr>
   </thead>
@@ -41,6 +49,7 @@
       <tr>
         <td></td>
         <td><%= school.cluster %></td>
+        <td><%= school.code %></td>
         <td><%= school.name %></td>
         <td><a href="<%= url_for controller: 'students', action: 'list_students', school: school.code %>">View summary</a></td>
       </tr>
