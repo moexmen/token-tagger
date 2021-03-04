@@ -122,11 +122,19 @@ const ResultModal = ({ result, showModal, isFetching, setShowModal }: ResultModa
     );
   }
 
+  useEffect(() => {
+    if (buttonRef.current) {
+      buttonRef.current.focus();
+    }
+  }, [result])
+
+  const buttonRef = React.useRef(null);
+
   return (
     <Modal isOpen={showModal} parent={document.body}>
       <FlashMessage result={result} />
       <div className="modal-footer">
-        <button  onClick={() => setShowModal(false)}>OK</button>
+        <button ref={buttonRef} onClick={() => setShowModal(false)}>OK</button>
       </div>
     </Modal>
   );
