@@ -61,7 +61,7 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
   } else if (result.reason == FailureReasons.PersonHasToken) {
     return (
       <div className={cssClass}>
-        <h1>Student error</h1>
+        <h1>Student Error</h1>
         <p>{student} already has a token.</p>
         <p>Please assign this token to another student</p>
       </div>

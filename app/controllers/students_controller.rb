@@ -22,6 +22,7 @@ class StudentsController < ApplicationController
       @statuses[status] += 1
     end
     @class_names = @counts_by_class.keys.sort
+    @weight = ENV['TOKEN_WEIGHT'].present? ? ENV['TOKEN_WEIGHT'].to_f : 17.85
   end
 
   def taggable_students
