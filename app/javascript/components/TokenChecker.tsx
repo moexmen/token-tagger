@@ -36,6 +36,14 @@ const StudentModal = ({ result, showModal, setShowModal }: StudentModalProps ) =
     return null;
   }
 
+  useEffect(() => {
+    if (buttonRef.current) {
+      buttonRef.current.focus();
+    }
+  }, [result])
+
+  const buttonRef = React.useRef(null);
+
   const student = result.student;
   let body = null;
   if (student != null) {
@@ -73,7 +81,7 @@ const StudentModal = ({ result, showModal, setShowModal }: StudentModalProps ) =
         {body}
       </div>
       <div className="modal-footer">
-        <button  onClick={closeModal}>OK</button>
+        <button ref={buttonRef} onClick={closeModal}>OK</button>
       </div>
     </Modal>
   );
