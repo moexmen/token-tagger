@@ -53,7 +53,7 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
   if (result.success) {
     return (
       <div className={cssClass}>
-        <h3>Success</h3>
+        <h1>Success</h1>
         <p>{student} has been tagged to the token.</p>
         <p>Please label the token for this student.</p>
       </div>
@@ -61,7 +61,7 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
   } else if (result.reason == FailureReasons.PersonHasToken) {
     return (
       <div className={cssClass}>
-        <h3>Student error</h3>
+        <h1>Student error</h1>
         <p>{student} already has a token.</p>
         <p>Please assign this token to another student</p>
       </div>
@@ -70,7 +70,7 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
     // For completeness. Should not happen if we validate the nric while seeding our DB
     return (
       <div className={cssClass}>
-        <h3>Student Error</h3>
+        <h1>Student Error</h1>
         <p>{student}'s NRIC is invalid.</p>
         <p>Please assign this token to another student</p>
       </div>
@@ -78,7 +78,7 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
   } else if (result.reason == FailureReasons.TokenAlreadyAssigned) {
     return (
       <div className={cssClass}>
-        <h3>Token Error</h3>
+        <h1>Token Error</h1>
         <p>The token has already been tagged to someone else.</p>
         <p>Please scan with another token.</p>
       </div>
@@ -95,7 +95,7 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
 
     return (
       <div className={cssClass}>
-        <h3>Error</h3>
+        <h1>Error</h1>
         <p>{message}</p>
         <p>Please try again or try to scan with another token.</p>
       </div>
