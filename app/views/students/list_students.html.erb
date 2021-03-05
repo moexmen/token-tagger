@@ -8,6 +8,7 @@
 <h3>Overview</h3>
 <table>
   <tr>
+    <th></th>
     <th>Class</th>
     <th>Tagged</th>
     <th>Pending</th>
@@ -16,6 +17,7 @@
     <th>Estimated Weight (g)</th>
   </tr>
   <tr>
+    <th></th>
     <th>TOTAL</th>
     <td><%= @statuses['assigned'] || 0 %></td>
     <td><%= @statuses['pending'] || 0 %></td>
@@ -25,6 +27,7 @@
   </tr>
   <% @class_names.each do |c| %>
     <tr>
+      <td><input type="checkbox"></td>
       <td><%= c %></td>
       <td><%= @counts_by_class[c]['assigned'] || 0 %></td>
       <td><%= @counts_by_class[c]['pending'] || 0 %></td>
