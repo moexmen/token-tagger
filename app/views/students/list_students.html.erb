@@ -23,7 +23,7 @@
     <td><%= @statuses['pending'] || 0 %></td>
     <td><%= @statuses['error_quota'] || 0 %></td>
     <td><%= @statuses.values.reduce(0, :+) %></td>
-    <td><%= ((@statuses['assigned'] || 0) * @weight).round(2) %></td>
+    <td></td>
   </tr>
   <% @class_names.each do |c| %>
     <tr>
@@ -33,7 +33,7 @@
       <td><%= @counts_by_class[c]['pending'] || 0 %></td>
       <td><%= @counts_by_class[c]['error_quota'] || 0 %></td>
       <td><%= @counts_by_class[c].values.reduce(0, :+) %></td>
-      <td><%= ((@counts_by_class[c]['assigned'] || 0) * @weight).round(2) %></td>
+      <td><%= (((@counts_by_class[c]['assigned'] || 0) * @token_weight) + @bag_weight).round(2) %></td>
     </tr>
   <% end %>
 </table>
