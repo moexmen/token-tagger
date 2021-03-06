@@ -3,8 +3,6 @@ require 'json'
 class StudentsController < ApplicationController
   protect_from_forgery except: :show
   def list_students
-    return redirect_to :action => "list_schools" if params["school"].nil? || params["school"] == ""
-
     @students = Student.where(school_code: params[:school]).order(serial_no: :asc)
 
     @counts_by_class = {}
@@ -73,6 +71,11 @@ class StudentsController < ApplicationController
     end
 
     render 'tag'
+
+  rescue StandardError => e
+    logger.error("Error tagging student_id: #{params[:student_id]}, token_id: #{params[:token_id]} | #{e.class}: #{e.message}")
+
+    return head :internal_server_error
   end
 
   def show
