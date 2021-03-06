@@ -1,0 +1,6 @@
+<div class="content">
+  <%= form_with url: '/set_table', method: :post do |f|  %>
+    <%= f.text_field :table, class: "textbox full-width-input", placeholder: "Enter your table number", required: true %>
+    <%= f.submit 'Sign In', class: 'button' %>
+  <% end %>
+</div>

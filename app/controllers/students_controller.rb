@@ -2,6 +2,8 @@ require 'json'
 
 class StudentsController < ApplicationController
   protect_from_forgery except: :show
+  before_action :check_table!, only: [:taggable_students, :next_student]
+
   def list_students
     @students = Student.where(school_code: params[:school]).order(serial_no: :asc)
 
@@ -58,7 +60,7 @@ class StudentsController < ApplicationController
     @student = Student.taggable.find_by(id: params[:student_id])
     return head :bad_request if @student.nil?
 
-    @result = client.assign_token(params[:token_id], @student)
+    @result = client.assign_token(params[:token_id], @student, current_table)
 
     if @result[:success] || @result[:reason] == Sally::PERSON_HAS_TOKEN || @result[:reason] == Sally::INVALID_NRIC
       @next_student = @student.next

@@ -20,7 +20,7 @@ module Sally
       @client_secret = client_secret
     end
 
-    def assign_token(token_id, student)
+    def assign_token(token_id, student, tagger=nil)
       return { success: true } if student.assigned?
 
       contact = transform_contact(student.contact)
@@ -37,7 +37,7 @@ module Sally
 
       Rails.logger.info { { student_id: student.id, student_name: student.name, response: response.body } }
 
-      handle_response(student, token_id, contact_rejected, response)
+      handle_response(student, token_id, contact_rejected, response, tagger)
     end
 
     private
@@ -50,12 +50,18 @@ module Sally
       contact
     end
 
-    def handle_response(student, token_id, contact_rejected, response)
+    def handle_response(student, token_id, contact_rejected, response, tagger)
       body = JSON.parse(response.body) unless response.body.blank?
       message = body['message'] unless body.blank?
 
       if response.status == 200
-        student.update({ token_id: token_id, status: Student.statuses[:assigned], contact_rejected: contact_rejected, tagged_at: Time.now })
+        student.update({
+          token_id: token_id,
+          status: Student.statuses[:assigned],
+          contact_rejected: contact_rejected,
+          tagged_at: Time.now,
+          batch: tagger
+        })
         return { success: true }
       end
 
@@ -66,7 +72,12 @@ module Sally
       reason = message_to_reason(message)
       status = reason_to_status(reason)
 
-      student.update({ status: status, error_response: body, contact_rejected: contact_rejected })
+      student.update({
+        status: status,
+        error_response: body,
+        contact_rejected: contact_rejected,
+        batch: tagger
+      })
 
       return { success: false, reason: reason }
     end
@@ -138,7 +149,7 @@ module Sally
       @client_secret = client_secret
     end
     
-    def assign_token(token_id, student)
+    def assign_token(token_id, student, tagger=nil)
       student.update({ token_id: token_id, status: Student.statuses[:assigned], tagged_at: Time.now })
       { success: true }
     end
