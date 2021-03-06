@@ -30,15 +30,11 @@ class StudentsController < ApplicationController
 
 
   def next_student
-    student = Student.taggable
-    if params[:batch]
-      student = student.where(batch: params[:batch])
-    elsif params[:school]
-      student = student.where(school: params[:school])
-      if params[:serial_no]
-        student = student.where('serial_no >= ?', params[:serial_no])
-      end
+    student = Student.taggable.where(school: params[:school])
+    if params[:serial_no]
+      student = student.where('serial_no >= ?', params[:serial_no])
     end
+
     student = student.first
     @student_json = if student.nil?
                       nil
