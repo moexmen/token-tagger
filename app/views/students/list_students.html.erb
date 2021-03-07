@@ -33,7 +33,7 @@
       <td><%= @counts_by_class[c]['pending'] || 0 %></td>
       <td><%= @counts_by_class[c]['error_quota'] || 0 %></td>
       <td><%= @counts_by_class[c].values.reduce(0, :+) %></td>
-      <td><%= (((@counts_by_class[c]['assigned'] || 0) * @token_weight) + @bag_weight).round(2) %></td>
+      <td><%= (((@counts_by_class[c]['assigned'] || 0) * @token_weight) + @bag_weight).round(1) %></td>
     </tr>
   <% end %>
 </table>

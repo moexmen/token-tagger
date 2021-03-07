@@ -40,7 +40,7 @@
     <% @schools.each do |school| %>
       <tr>
         <td></td>
-        <td><%= school.name %></td>
+        <td><a href="<%= url_for controller: 'students', action: 'list_students', school: school.code %>"><%= school.name %></a></td>
         <td><%= @date_counts[school.code] %></td>
         <td>
           <%= @date_firsts[school.code].try(:in_time_zone, 'Asia/Singapore').try(:strftime, '%H:%M:%S') %>
