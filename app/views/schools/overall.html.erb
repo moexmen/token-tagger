@@ -47,13 +47,35 @@
           to
           <%= @date_lasts[school.code].try(:in_time_zone, 'Asia/Singapore').try(:strftime, '%H:%M:%S') %>
         </td>
-        <td><%= (@date_counts[school.code] / (@date_lasts[school.code] - @date_firsts[school.code]) * (60*60)).round(1) %></td>
+        <td>
+          <% if @date_lasts[school.code] != @date_firsts[school.code] %>
+            <%= (@date_counts[school.code] / (@date_lasts[school.code] - @date_firsts[school.code]) * (60*60)).round(1) %>
+          <% else %>
+            <%= @date_counts[school.code] %>
+          <% end %>
+        </td>
         <td><%= @counts_by_school[school.code]['assigned'] || 0 %></td>
         <td><%= @counts_by_school[school.code]['pending'] || 0 %></td>
         <td><%= @counts_by_school[school.code]['error_quota'] || 0 %></td>
         <td><%= @counts_by_school[school.code].values.reduce(0, :+) %></td>
       </tr>
     <% end %>
-    
+  </table>
+
+  <h2>Total tagged by table</h3>
+  <table>
+    <tr>
+      <th>Table</th>
+      <% @tagged_by_table.each do |t, _| %>
+      <th><%= t %></th>
+      <% end %>
+    </tr>
+
+    <tr>
+      <th>Tagged</th>
+      <% @tagged_by_table.each do |_, c| %>
+      <td><%= c %></td>
+      <% end %>
+    </tr>
   </table>
 <% end %>

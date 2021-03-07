@@ -20,5 +20,7 @@ class SchoolsController < ApplicationController
       @counts_by_school[k[0]] = {} unless @counts_by_school.key?(k[0])
       @counts_by_school[k[0]][k[1]] = v
     end
+
+    @tagged_by_table = Student.where(tagged_at: @date.beginning_of_day..@date.end_of_day).group(:batch).count
   end
 end
