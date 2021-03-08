@@ -11,29 +11,29 @@
     <th></th>
     <th>Class</th>
     <th>Tagged</th>
+    <th>Estimated Weight (g)</th>
     <th>Pending</th>
     <th>Already Collected</th>
     <th>Total</th>
-    <th>Estimated Weight (g)</th>
   </tr>
   <tr>
     <th></th>
     <th>TOTAL</th>
     <td><%= @statuses['assigned'] || 0 %></td>
+    <td></td>
     <td><%= @statuses['pending'] || 0 %></td>
     <td><%= @statuses['error_quota'] || 0 %></td>
     <td><%= @statuses.values.reduce(0, :+) %></td>
-    <td></td>
   </tr>
   <% @class_names.each do |c| %>
     <tr>
       <td><input type="checkbox"></td>
       <td><%= c %></td>
       <td><%= @counts_by_class[c]['assigned'] || 0 %></td>
+      <td><%= (((@counts_by_class[c]['assigned'] || 0) * @token_weight) + @bag_weight).round(1) %>g</td>
       <td><%= @counts_by_class[c]['pending'] || 0 %></td>
       <td><%= @counts_by_class[c]['error_quota'] || 0 %></td>
       <td><%= @counts_by_class[c].values.reduce(0, :+) %></td>
-      <td><%= (((@counts_by_class[c]['assigned'] || 0) * @token_weight) + @bag_weight).round(1) %></td>
     </tr>
   <% end %>
 </table>
@@ -60,7 +60,7 @@
             </a>
           </td>
         <% elsif student.status == 'assigned' %>
-          <td class="bg-green">Tagged at <%= student.tagged_at.try(:in_time_zone, 'Asia/Singapore').try(:strftime, '%a %d %b %H:%M') %></td>
+          <td class="bg-green">Tagged at <%= student.tagged_at.try(:in_time_zone, 'Asia/Singapore').try(:strftime, '%a %d %b %H:%M:%S') %></td>
         <% elsif student.status == 'error_quota' %>
           <td class="bg-yellow">Student already collected a token</td>
         <% elsif student.status == 'error_nric' %>
