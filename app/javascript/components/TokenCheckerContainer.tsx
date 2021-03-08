@@ -48,5 +48,5 @@ export default () => {
     }
   }
 
-  return <TokenChecker result={result} getStudentWithToken={getStudentWithToken} />;
+  return <TokenChecker isFetching={isFetching} result={result} getStudentWithToken={getStudentWithToken} />;
 }

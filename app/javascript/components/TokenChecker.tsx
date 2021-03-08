@@ -36,6 +36,14 @@ const StudentModal = ({ result, showModal, setShowModal }: StudentModalProps ) =
     return null;
   }
 
+  if (result == null) {
+    return (
+      <Modal isOpen={showModal} parent={document.body}>
+        <div className="modal-body">Checking token...</div>
+      </Modal>
+    );
+  }
+
   useEffect(() => {
     if (buttonRef.current) {
       buttonRef.current.focus();
@@ -88,12 +96,13 @@ const StudentModal = ({ result, showModal, setShowModal }: StudentModalProps ) =
 }
 
 interface TokenCheckerProps {
+  isFetching: boolean;
   result: StudentResult | null;
   getStudentWithToken: (tokenId: string) => void;
 }
 
 export default (props: TokenCheckerProps) => {
-  const { result, getStudentWithToken } = props;
+  const { isFetching, result, getStudentWithToken } = props;
 
   const [tokenId, setTokenId] = useState('');
   const [showQr, setShowQr] = useState(false);
@@ -103,15 +112,15 @@ export default (props: TokenCheckerProps) => {
 
   useEffect(() => {
     if (!showModal) {
+      setTokenId('');
       tokenInputRef.current.focus();
     }
   }, [showModal])
 
   useEffect(() => {
-    setTokenId('');
-    // Show modal with student if result is available
-    setShowModal(result != null);
-  }, [result])
+    // Show modal with result if result is available
+    setShowModal(result != null || isFetching);
+  }, [result, isFetching])
 
   const handleEnter = e => {
     if (tokenId === '' || showModal) {
