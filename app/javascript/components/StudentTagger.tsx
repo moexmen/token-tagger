@@ -107,9 +107,10 @@ interface ResultModalProps {
   isFetching: boolean;
   showModal: boolean;
   result?: Result;
+  isClassEnd?: boolean;
   setShowModal: (show: boolean) => void;
 }
-const ResultModal = ({ result, showModal, isFetching, setShowModal }: ResultModalProps ) => {
+const ResultModal = ({ result, showModal, isFetching, setShowModal, isClassEnd = false }: ResultModalProps ) => {
   if (!showModal) {
     return null;
   }
@@ -129,10 +130,11 @@ const ResultModal = ({ result, showModal, isFetching, setShowModal }: ResultModa
   }, [result])
 
   const buttonRef = React.useRef(null);
-
+  const currClass = result?.student?.class_name || '';
   return (
     <Modal isOpen={showModal} parent={document.body}>
       <FlashMessage result={result} />
+      {(isClassEnd && currClass !== '') && <div className="class-end-banner">Last student in {currClass}</div>}
       <div className="modal-footer">
         <button ref={buttonRef} onClick={() => setShowModal(false)}>OK</button>
       </div>
@@ -176,7 +178,7 @@ export default (props: StudentTaggerProps) => {
   if (student == null) {
     return (
       <div className="content">
-        <ResultModal isFetching={isFetching} result={result} showModal={showModal} setShowModal={setShowModal} />
+        <ResultModal isFetching={isFetching} isClassEnd={true} result={result} showModal={showModal} setShowModal={setShowModal} />
         <div>Finshed tagging all students in this batch</div>
       </div>
     );
@@ -184,10 +186,9 @@ export default (props: StudentTaggerProps) => {
 
   const isNextClass = result?.student?.class_name != student.class_name;
   const classCss = `class${isNextClass ? ' bold' : ''}`
-
   return (
     <div className="content">
-      <ResultModal isFetching={isFetching} result={result} showModal={showModal} setShowModal={setShowModal} />
+      <ResultModal isFetching={isFetching} isClassEnd={isNextClass} result={result} showModal={showModal} setShowModal={setShowModal} />
       <div className="student-details">
         <div className="serial-no">{student.serial_no}</div>
         <div className="student">
