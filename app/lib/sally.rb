@@ -28,11 +28,13 @@ module Sally
 
       response = send_request(token_id, student.nric, contact)
 
-      body = JSON.parse(response.body) unless response.body.blank?
-      if body && body['message'] === INVALID_CONTACT
-        contact_rejected = true
-        Rails.logger.info { { student_id: student.id, student_name: student.name, response: body, message: 'Retrying due to invalid contact' } }
-        response = send_request(token_id, student.nric, CONTACT_PLACEHOLDER)
+      if ENV['RETRY_INVALID_CONTACT'].present?
+        body = JSON.parse(response.body) unless response.body.blank?
+        if body && body['message'] === INVALID_CONTACT
+          contact_rejected = true
+          Rails.logger.info { { student_id: student.id, student_name: student.name, response: body, message: 'Retrying due to invalid contact' } }
+          response = send_request(token_id, student.nric, CONTACT_PLACEHOLDER)
+        end
       end
 
       Rails.logger.info { { student_id: student.id, student_name: student.name, response: response.body } }
