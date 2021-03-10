@@ -24,14 +24,14 @@ module Sally
       return { success: true } if student.assigned?
 
       contact = transform_contact(student.contact)
-      contact_rejected = contact == CONTACT_PLACEHOLDER
+      contact_rejected = (contact == CONTACT_PLACEHOLDER)
 
       response = send_request(token_id, student.nric, contact)
 
-      contact_rejected = false
       body = JSON.parse(response.body) unless response.body.blank?
       if body && body['message'] === INVALID_CONTACT
         contact_rejected = true
+        Rails.logger.info { { student_id: student.id, student_name: student.name, response: body, message: 'Retrying due to invalid contact' } }
         response = send_request(token_id, student.nric, CONTACT_PLACEHOLDER)
       end
 
