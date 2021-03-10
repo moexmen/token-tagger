@@ -16,43 +16,40 @@ export default (props: Props) => {
   const [isFetching, setIsFetching] = useState(false);
 
   const assignToken = (tokenId: string, studentId: number) => {
-    if (isFetching) {
+    if (isFetching || tokenId === '') {
       return;
     }
 
     setIsFetching(true);
+    setStudentResult(r => ({...r, result: undefined }));
+    
+    fetch('/students/tag', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ student_id: studentId, token_id: tokenId })
+      }).then(resp => resp.json())
+      .then(data => {
+        setIsFetching(false);
 
-    if (tokenId !== '') {
-      setStudentResult(r => ({...r, result: undefined }));
-      
-      fetch('/students/tag', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ student_id: studentId, token_id: tokenId })
-        }).then(resp => resp.json())
-        .then(data => {
-          setIsFetching(false);
-
-          setStudentResult({
-            student: data.next_student,
-            result: data.result
-          });
-        }).catch(e => {
-          setIsFetching(false);
-          setStudentResult(r => (
-            {
-              ...r,
-              result: {
-                success: false,
-                reason: FailureReasons.ApiError,
-                student: r.student
-              }
-            }
-          ));
+        setStudentResult({
+          student: data.next_student,
+          result: data.result
         });
-    }
+      }).catch(e => {
+        setIsFetching(false);
+        setStudentResult(r => (
+          {
+            ...r,
+            result: {
+              success: false,
+              reason: FailureReasons.ApiError,
+              student: r.student
+            }
+          }
+        ));
+      });
   }
 
   return <StudentTagger isFetching={isFetching} result={studentResult.result} student={studentResult.student} assignToken={assignToken} />
