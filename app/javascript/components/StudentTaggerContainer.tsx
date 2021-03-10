@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import StudentTagger, { Student, Result, FailureReasons } from './StudentTagger';
 
 interface Props {
-  csrfToken: string;
   student: Student;
 }
 
@@ -13,7 +12,6 @@ export default (props: Props) => {
     student: props.student,
     result: undefined
   })
-  const [csrfToken, setCsrfToken] = useState(props.csrfToken);
 
   const [isFetching, setIsFetching] = useState(false);
 
@@ -30,8 +28,7 @@ export default (props: Props) => {
       fetch('/students/tag', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ student_id: studentId, token_id: tokenId })
         }).then(resp => resp.json())
@@ -42,7 +39,6 @@ export default (props: Props) => {
             student: data.next_student,
             result: data.result
           });
-          setCsrfToken(data.csrf_token);
         }).catch(e => {
           setIsFetching(false);
           setStudentResult(r => (

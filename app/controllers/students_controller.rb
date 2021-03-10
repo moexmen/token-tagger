@@ -1,7 +1,7 @@
 require 'json'
 
 class StudentsController < ApplicationController
-  protect_from_forgery except: :show
+  skip_before_action :verify_authenticity_token
   before_action :check_table!, only: [:taggable_students, :next_student]
 
   def list_students
