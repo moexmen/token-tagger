@@ -106,7 +106,11 @@ module Sally
     when PERSON_QUOTA_REACHED
       Sally::PERSON_HAS_TOKEN
     else
-      Sally::API_ERROR
+      if message.blank?
+        Sally::API_ERROR
+      else
+        message
+      end
     end
    end
 
