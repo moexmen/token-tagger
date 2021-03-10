@@ -32,12 +32,12 @@ module Sally
         body = JSON.parse(response.body) unless response.body.blank?
         if body && body['message'] === INVALID_CONTACT
           contact_rejected = true
-          Rails.logger.info { { student_id: student.id, student_name: student.name, response: body, message: 'Retrying due to invalid contact' } }
+          Rails.logger.info { { student_id: student.id, student_name: student.name, message: 'Retrying due to invalid contact' } }
           response = send_request(token_id, student.nric, CONTACT_PLACEHOLDER)
         end
       end
 
-      Rails.logger.info { { student_id: student.id, student_name: student.name, response: response.body } }
+      # Rails.logger.info { { student_id: student.id, student_name: student.name, response: response.body } }
 
       handle_response(student, token_id, contact_rejected, response, tagger)
     end
@@ -140,7 +140,7 @@ module Sally
         }]
       }
 
-      Faraday.new(url: @endpoint).post do |req|
+      Faraday.new(url: @endpoint) { |f| f.response :logger, Rails.logger, :bodies => true, :headers => { :request => false, :response => true } }.post do |req|
         req.headers[ImmutableKey.new('x-api-key')] = @client_secret
         req.headers[ImmutableKey.new('content-type')] = 'application/json'
 
