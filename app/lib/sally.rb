@@ -130,7 +130,7 @@ module Sally
           identifierInputs: [
             {
               label: "Device code",
-              value: token_id
+              value: token_id.upcase
             },
             {
               label: "Contact number",
