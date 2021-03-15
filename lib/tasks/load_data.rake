@@ -25,8 +25,13 @@ namespace :data do
     sheets = xls.sheets
 
     if sheets.length != 1
-      puts "Unexpected number of sheets: #{sheets.length} in #{args[:file]}"
-      return
+      if sheets.length == 2 && sheets[1].state == 'hidden'
+        # hack for the SPED school files which all have a hidden Sheet2
+        puts "Two sheets, but second one is hidden, ignoring it"
+      else
+        puts "Unexpected number of sheets: #{sheets.length} in #{args[:file]}"
+        return
+      end
     end
 
     sheet = sheets[0]
@@ -74,7 +79,7 @@ namespace :data do
       orig_contact = row[HEADERS[:contact_number]].clone
       clean_contact!(row)
       if orig_contact.strip != row[HEADERS[:contact_number]]
-        puts "Cleaned contact #{orig_contact} for #{row.values}"
+        puts "Cleaned contact #{orig_contact} to #{row[HEADERS[:contact_number]]} for #{row.values}"
       end
 
       # format local phone numbers
@@ -177,6 +182,6 @@ namespace :data do
   end
 
   def clean_contact!(row)
-    row[HEADERS[:contact_number]].gsub!(/[^\+0-9]/,'')
+    row[HEADERS[:contact_number]].gsub!(/[^\/\+0-9]/,'')
   end
 end
