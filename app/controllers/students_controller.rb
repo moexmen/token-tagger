@@ -10,7 +10,7 @@ class StudentsController < ApplicationController
     @counts_by_class = {}
     @statuses = {}
     @students.each do |s|
-      class_name = s.class_name || ''
+      class_name = "#{s.level} #{s.class_name}" || ''
       status = s.status
 
       @counts_by_class[class_name] = {} unless @counts_by_class.key?(class_name)
