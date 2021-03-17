@@ -49,7 +49,7 @@ const FlashMessage = ({ result }: { result?: Result} ) => {
     cssClass = 'banner warning';
   }
 
-  const student = <span><b>{result.student.serial_no}</b>{` | ${result.student.class_name} | ${result.student.name}`}</span>;
+  const student = <span><b>{result.student.serial_no}</b>{` | ${result.student.level} ${result.student.class_name} | ${result.student.name}`}</span>;
   if (result.success) {
     return (
       <div className={cssClass}>
@@ -183,7 +183,7 @@ export default (props: StudentTaggerProps) => {
     );
   }
 
-  const isNextClass = result?.student?.class_name != student.class_name;
+  const isNextClass = `${result?.student?.level} ${result?.student?.class_name}` != `${student.level} ${student.class_name}`;
   const classCss = `class${isNextClass ? ' bold' : ''}`
   return (
     <div className="content">
@@ -192,7 +192,7 @@ export default (props: StudentTaggerProps) => {
         <div className="serial-no">{student.serial_no}</div>
         <div className="student">
         <div className="school">{student.school_name}</div>
-          <div className={classCss}>{student.class_name}</div>
+          <div className={classCss}>{student.level} {student.class_name}</div>
           <div className="name">{student.name}</div>
         </div>
       </div>

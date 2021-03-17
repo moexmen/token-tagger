@@ -60,7 +60,7 @@ const StudentModal = ({ result, showModal, setShowModal }: StudentModalProps ) =
         <div className="serial-no">{student.serial_no}</div>
         <div className="student">
           <div className="school">{student.school_name}</div>
-          <div className="class">{student.class_name}</div>
+          <div className="class">{student.level} {student.class_name}</div>
           <div className="name">{student.name}</div>
         </div>
       </div>
