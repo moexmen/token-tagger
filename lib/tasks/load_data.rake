@@ -95,7 +95,7 @@ namespace :data do
       ### process nric
 
       # some of entries have whitespace around it
-      row[HEADERS[:nric]] = strip_spaces(row[HEADERS[:nric]])
+      row[HEADERS[:nric]] = strip_spaces(row[HEADERS[:nric]]).upcase
 
       # semi-hard validation of NRIC -- while we still load the row, it has error status immediately set
       if valid_nric?(row)
